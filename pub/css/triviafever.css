@@ -1,0 +1,419 @@
+@charset "UTF-8";
+/* CSS Document */
+
+body {
+	margin: 0;
+	padding: 0;
+	background: url(../img/background.png) no-repeat;
+	background-size: cover;
+	font-family: 'Source Sans Pro', 'sans-serif';
+	-ms-behavior: url(../img/backgroundsize.min.htc);
+}
+.center {
+	width: 984px;
+	margin: 0 auto;
+}
+#header {
+	padding-top: 20px;
+}
+input {
+    -webkit-appearance: none;
+    border-radius: 0;
+}
+
+.radio {
+	display:inline-block;
+	-webkit-appearance:radio;
+}
+.radio-h {
+	font-size: 15px;
+	cursor: pointer;
+	display: inline-block;
+	padding: 5px 10px;
+	vertical-align: top;
+}
+
+.radio-h1 {
+	width: 295px;
+	padding-right: 10px;
+}
+
+.radio-h2 {
+	width: 255px;
+}
+
+.question {
+	font-weight: bold;
+	margin-bottom: 5px;
+	font-size: 22px;
+}
+.question-h {
+	margin-bottom: 10px;
+	line-height: 25px;
+}
+#register .main_content {
+	background: url(../img/reg_circle.png);
+	width: 983px;
+	height: 954px;
+}
+#register .reg_content {
+	float: left;
+	width: 700px;
+	height: 900px;
+	margin-top: 170px;
+	margin-left: 134px;
+	color: #fff;
+}
+#register .reg_title {
+	text-align: center;
+	font-size: 54px;
+	font-weight: 700;
+}
+
+#register .reg_survey_title {
+	text-align: center;
+	font-size: 28px;
+	font-weight: 700;
+}
+
+#register .reg_area {
+	margin-top: 10px;
+	margin-left: 9%;
+}
+.row {
+	float: left;
+	width: 100%;
+	margin-top: 20px;
+}
+.cell {
+	float: left;
+	width: 50%;
+}
+.cell input {
+	width: 90%;
+	height: 40px;
+	border: 0;
+	outline: 0;
+	border-radius: 0;
+}
+.select {
+	width: 286px;
+	height: 40px;
+	border: 0;
+	outline: 0;
+	border-radius: 0;
+	background-color: #fff;
+	font-size: 14px;
+}
+.cell label {
+	font-size: 24px;
+	font-weight: 200;
+}
+.button {
+	outline: 0;
+	border-radius: 5px;
+	background: #20abf0;
+	color: #fff;
+	font-size: 23px;
+	border: 6px solid #ffffff;
+	cursor: pointer;
+	font-weight: 700;
+	height: 72px;
+	line-height: 12px;
+	width: 286px;
+	border-radius:0;
+}
+.redbutton {
+	outline: 0;
+	border-radius: 5px;
+	background: #df2725;
+	color: #fff;
+	font-size: 23px;
+	border: 6px solid #ffffff;
+	cursor: pointer;
+	font-weight: 700;
+	height: 58px;
+	line-height: 12px;
+	width: 286px;
+	border-radius:0;
+}
+.topbutton {
+	position: absolute;
+	right: 236px;
+	top: -91px;
+	border-radius:0;
+}
+.bottombutton {
+	position: absolute;
+	right: 142px;
+	bottom: 65px;
+	border-radius:0;
+}
+.button:hover, .redbutton:hover {
+	-webkit-box-shadow: 0px 0px 23px 0px rgba(50, 50, 50, 0.75);
+	-moz-box-shadow: 0px 0px 23px 0px rgba(50, 50, 50, 0.75);
+	box-shadow: 0px 0px 23px 0px rgba(50, 50, 50, 0.75);
+}
+#register .button {
+	margin-left: 168px;
+	margin-top: 20px;
+	border-radius:0;
+}
+#footer {
+	margin: 40px 0;
+}
+#register {
+	display: none;
+}
+#landing .main_content {
+	background: url(../img/landing.png);
+	width: 963px;
+	height: 1254px;
+	position: relative;
+}
+#landing .bubble_title {
+	font-weight: 700;
+	font-size: 34px;
+	text-shadow: 0px 0px 3px rgba(150, 150, 150, 1);
+	text-align: center;
+	padding: 0 20px;
+}
+#landing .bubble_desc {
+	margin-top: 10px;
+	font-weight: 400;
+	font-size: 24px;
+	text-align: center;
+	padding: 0 40px;
+}
+#landing .bubble-1 {
+	position: absolute;
+	width: 376px;
+	height: 398px;
+	color: #fff;
+	top: 94px;
+	left: 40px;
+}
+#landing .bubble-2 {
+	position: absolute;
+	width: 376px;
+	height: 398px;
+	color: #fff;
+	top: 200px;
+	right: 164px;
+}
+#landing .bubble-2 .bubble_desc {
+	margin-top: 20px
+}
+#landing .bubble-3 {
+	position: absolute;
+	width: 376px;
+	height: 398px;
+	color: #fff;
+	top: 590px;
+	right: 106px;
+}
+#landing .bubble-4 {
+	position: absolute;
+	width: 376px;
+	height: 398px;
+	color: #fff;
+	top: 820px;
+	left: 80px;
+}
+#landing .bubble-3 .bubble_title {
+	text-align: center;
+}
+#landing .bubble-3 .bubble_desc {
+	text-align: left;
+	padding: 0 22px;
+}
+.bold {
+	font-weight: 700;
+}
+.footer_txt {
+	font-weight: 200;
+	color: #fff;
+	font-size: 12px;
+}
+
+@media only screen and (max-width: 984px) {
+	#header .center {
+text-align: center;
+}
+#register .main_content {
+	background: none;
+	width: 100%;
+	height: 954px;
+}
+#register .reg_content {
+	margin-left: 0;
+	margin-top: 0;
+	height: auto;
+}
+#register .main_content {
+	height: auto;
+}
+#register {
+	width: 100%;
+	float: left;
+}
+#footer {
+	float: left;
+	margin-top: 40px;
+}
+#landing .main_content {
+	background: url(../img/landing_long.png) no-repeat;
+	width: 598px;
+	height: 1920px;
+	position: relative;
+	margin: 0 auto;
+	margin-top: 100px;
+}
+#landing .center{ width: auto; }
+.topbutton {
+	right: 146px;
+}
+.bottombutton {
+	right: 146px;
+	bottom: -10px;
+}
+element.style {
+}
+#landing .bubble-1 {
+	top: 90px;
+	left: 112px;
+}
+#landing .bubble-2 {
+	top: 504px;
+	left: 112px;
+}
+#landing .bubble-3 {
+	top: 920px;
+	right: 110px;
+}
+#landing .bubble-4 {
+	top: 1420px;
+	left: 108px;
+}
+#footer .center {
+	width: 100%;
+}
+#footer .footer_txt {
+	padding: 0 10px;
+}
+#footer .center img {
+	margin-left: 10px;
+}
+}
+
+@media only screen and (max-width: 893px) {
+#header .center {
+	width: 100%;
+}
+#header .center img {
+	width: 90%;
+}
+}
+
+@media only screen and (max-width: 750px) {
+#header .center {
+	width: 100%;
+}
+#header .center img {
+	width: 90%;
+}
+.cell {
+	width: 100%;
+}
+.cell label {
+	width: 100%;
+	float: left;
+}
+.row {
+	margin-top: 0;
+}
+
+#register .reg_survey_title {
+	font-size: 20px;
+	margin-left: 46px;
+	margin-top: 10px;
+}
+
+#register .center {
+	width: 100%;
+}
+#register .reg_content {
+	width: 90%;
+}
+.cell input {
+	width: 100%;
+}
+#register .button {
+	margin-left: 0;
+	width: 100%;
+	border-radius:0;
+}
+#footer .center {
+	width: 100%;
+}
+#footer .footer_txt {
+	padding: 0 10px;
+}
+#footer .center img {
+	margin-left: 10px;
+}
+#register .reg_title {
+	font-size: 30px;
+	margin-left: 46px;
+	margin-top: 10px;
+}
+}
+ @media only screen and (max-width: 576px) {
+#landing .main_content {
+ background: url(../img/landing_small.png) no-repeat;
+ width: 380px;
+margin: 0 auto;
+ height: 1200px;
+ position: relative;
+ margin-top: 100px;
+}
+#landing .center{ width: auto; }
+
+ .topbutton {
+ left: 50px;
+ border-radius: 0;
+}
+.bottombutton {
+right: 51px;
+bottom: 0px;
+}
+ #landing .bubble_title {
+ font-size:24px;
+}
+ #landing .bubble_desc {
+ font-size:16px;
+}
+ #landing .bubble-1 {
+ top: 60px;
+ left: 64px;
+ width: 251px;
+}
+ #landing .bubble-2 {
+ top: 322px;
+ left: 64px;
+ width: 251px;
+}
+ #landing .bubble-3 {
+ top: 592px;
+ left: 44px;
+ width: 294px;
+}
+ #landing .bubble-4 {
+top: 900px;
+left: 6px;
+}
+#landing .main_content{
+	height:1260px;
+}
+
+}

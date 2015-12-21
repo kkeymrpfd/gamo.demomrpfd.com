@@ -1,0 +1,48 @@
+@font-face {
+    font-family: 'Bariol Bold';
+    src: url('../fonts/BariolBold.eot');
+    src: url('../fonts/BariolBold.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/BariolBold.svg#BariolBold') format('svg'),
+         url('../fonts/BariolBold.woff') format('woff'),
+         url('../fonts/BariolBold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Bariol Light';
+    src: url('../fonts/BariolLight.eot');
+    src: url('../fonts/BariolLight.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/BariolLight.svg#BarioLight') format('svg'),
+         url('../fonts/BariolLight.woff') format('woff'),
+         url('../fonts/BariolLight.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Bariol Thin';
+    src: url('../fonts/BariolThin.eot');
+    src: url('../fonts/BariolThin.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/BariolThin.svg#BariolThin') format('svg'),
+         url('../fonts/BariolThin.woff') format('woff'),
+         url('../fonts/BariolThin.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    @font-face {
+        font-family: 'Bariol Bold';
+        src: url('../fonts/BariolBold.svg') format('svg');
+    }
+    
+    @font-face {
+        font-family: 'Bariol Light';
+        src: url('../fonts/BariolLight.svg') format('svg');
+    }
+    
+    @font-face {
+        font-family: 'Bariol Thin';
+        src: url('../fonts/BariolThin.svg') format('svg');
+    }
+}

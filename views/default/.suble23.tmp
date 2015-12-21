@@ -1,0 +1,84 @@
+<?
+Core::get_element('game_header');
+?>
+<? $view_output .= '
+<script type="text/javascript" src="/js/gamo/resources.js"></script>
+<div class="row">
+			<div class="col-md-4 col-sm-4 col-xs-12 submenu hidden-xs">
+'; ?>
+			<? Core::get_element('game_nav'); ?>
+<? $view_output .= '
+			</div>
+			<div class="col-md-8 col-sm-8 col-xs-12 content2 non-meetings">
+				<div class="hidden-xs">
+					<div class="module-title">Sales Resources</div>
+					<h4 style="line-height: 24px;"></h4>
+				</div>
+				<div class="visible-xs">
+					<div class="content widget">
+						<h1>Sales Resources</h1>
+						<h5>Below you will find valuable information regarding Sparkmotive Sales Enablement products and solutions to help better prepare you for the sales process. Look for new trivia sessions to earn points based on the knowledge you gain from these materials.</h5>
+					</div>
+				</div>
+				<div class="bluebackground widget">
+                <div class="table">
+                    <div class="table-row">
+                    	<div class="table-cell align-left" style="width:28%">
+								<h2>' . $gamo->r('actions')->get_action_points('download_resource') . ' pts</h2>
+							</div>
+						<div class="table-cell">' . $gamo->r('actions')->get_action_name('download_resource') . '</div>
+						</div>
+                      <div class="table-row">
+                    	<div class="table-cell align-left" style="width:28%">
+								<h2>$10</h2>
+							</div>
+						<div class="table-cell">The first 100 people to download content</div>
+						</div>
+                     </div>
+                               
+				</div>			
+'; ?>	
+
+				<? foreach( $data['resources'] as $news_item ): ?>		
+				
+				<? if( $news_item['type'] == 'video' ): ?>
+				
+					<? $action_button_name = 'Watch'; ?>
+					<? $action_button_url = '#'; ?>
+					<? $action_button_action = 'gamo_resources.show_video({ resource_id: ' . $news_item['resource_id'] . ' });return false;'; ?>
+					
+				<?   else: ?>
+				
+				   	<? $action_button_name = 'Download'; ?>
+					<? $action_button_url = '/?a=download_resource&resource_id=' . $news_item['resource_id']; ?>
+					<? $action_button_action = ''; ?>
+					
+				<?    endif; ?>
+						
+				<? $view_output .= '
+				<div class="content widget"> 
+					<div class="media">
+						<div class="pull-left">
+							<div class="media-object"> <img src="/resource_img.php?image=' . $news_item['type'] . '" alt="">
+								<p><a class="btn bluebackground btn-block" target="_blank" onclick="' . $action_button_action . '" href="' . $action_button_url . '">' . $action_button_name . '</a></p>
+							</div>
+						</div>
+						<div class="media-body">
+							<h4 class="media-heading">' . $news_item['title'] . '</h4>
+							<p>' . $news_item['descrip'] . '</p>
+						</div>
+					</div>
+					<div class="media">
+						<div id="resource-show-'.$news_item['resource_id'].'"></div>
+					</div>
+				</div>
+				'; ?>
+				<? endforeach; ?>
+				
+<? $view_output .= '				
+	</div>
+</div>
+'; ?>
+<?
+Core::get_element('game_footer');
+?>

@@ -1,0 +1,14 @@
+inc/config.php
+*generate_views.php
+.buildpath
+.project
+.settings
+.externalToolBuilders
+rsyncExclude.txt
+inc/apis/social/config.php
+*config.php*
+*sqladmin1*
+pub/phpmyadmin
+pub/.htaccess
+.DS_Store
+*.codekit

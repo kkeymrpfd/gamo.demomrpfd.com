@@ -1,0 +1,101 @@
+/** Global reset and styles **/
+* {
+    background: transparent;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    vertical-align: baseline;
+    outline: 0;
+    -khtml-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+*:focus { outline: 0; }
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+fieldset, img, a img {
+    border: 0 none;
+    outline: 0;
+}
+ol, ul, li { list-style: none; }
+caption, th { text-align: left; }
+h1, h2, h3, h4, h5, h6 {
+    font-size: 100%;
+    font-weight: normal;
+    line-height: 1.2;
+}
+blockquote:before, blockquote:after, q:before, q:after { content: ''; }
+blockquote, q { quotes: "" ""; }
+strong { font-weight: bold; }
+em { font-style: italic; }
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+sup {
+    position: relative;
+    top: -0.4em;
+}
+
+.clearfix:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background-color: #FFF;
+    font-size: 100%;
+    line-height: 1.2;
+    color: #000;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+}
+a {
+    color: inherit;
+    text-decoration: underline;
+}
+/* Remove button padding in FF */
+input::-moz-focus-inner, button::-moz-focus-inner { 
+    border: 0;
+    padding: 0;
+}
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+textarea,
+select {
+    display: block;
+    width: 100%;
+    border: 0.1em solid #000;
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
+    border-radius: 0;
+    -webkit-appearance: none;
+}
+textarea {
+    height: 4em;
+    resize: none;
+    overflow: auto;
+}
+label, fieldset {
+    display: block;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+input[type="submit"], button {
+    overflow: visible;
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
+    border-radius: 0;
+    -webkit-appearance: none;
+}

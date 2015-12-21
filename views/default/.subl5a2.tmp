@@ -1,0 +1,340 @@
+<?
+Core::get_element('game_header');
+?>
+<? $view_output .= '
+<link rel="stylesheet" type="text/css" href="/css/datepicker.css">
+<script src="/js/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="/js/core.js"></script>
+<script type="text/javascript" src="/js/gamo/meeting.js"></script>
+<script type="text/javascript" src="/js/gamo/gamo.js"></script>
+<script type="text/javascript" src="/js/pager.js"></script>
+<script type="text/javascript" src="/js/moment.js"></script>
+<div class="row">
+			<div class="col-md-4 col-sm-4 col-xs-12 submenu hidden-xs">
+'; ?>
+			<? Core::get_element('game_nav'); ?>
+<? $view_output .= '
+			</div>
+			<div class="col-md-8 col-sm-8 col-xs-12 content2 meetings">
+            
+				<div class="hidden-xs">
+					<div class="module-title">Opportunities / Deal Registration</div>
+					<h4 style="line-height: 24px;">Earn points and prizes for what you Schedule, Transact, and Close. </h4>
+				</div>
+				<div class="visible-xs">
+					<div class="widget content">
+						<h1>Meetings</h1>
+						<h5>Earn points and prizes for what you Schedule, Transact, and Close.</strong> </h5>
+					</div>
+				</div>
+				<div class="bluebackground widget " style="padding:0;">
+					<div class="table">
+                    <div class="table-row row-light">
+                    	<div class="table-cell align-left cell-amount">
+								<h2>' . $gamo->r('actions')->get_action_points('submit_deal_reg') . ' pts</h2>
+							</div>
+                        <div class="table-cell cell-badge">&nbsp;</div>
+						<div class="table-cell cell-desc">' . $gamo->r('actions')->get_action_name('submit_deal_reg') . ' </div>
+						</div>
+                    <div class="table-row row-dark">
+                    	<div class="table-cell align-left cell-amount">
+								<h2>' . $gamo->r('actions')->get_action_points('submit_deal_close') . ' pts</h2>
+							</div>
+                          <div class="table-cell cell-badge">&nbsp;</div>
+						<div class="table-cell cell-desc">' . $gamo->r('actions')->get_action_name('submit_deal_close') . '</div>
+					</div>
+					<div class="table-row row-light">
+                    	<div class="table-cell align-left cell-amount">
+								<h2>' . $gamo->r('actions')->get_action_points('submit_deal_feedback') . ' pts</h2>
+							</div>
+                          <div class="table-cell cell-badge">&nbsp;</div>
+						<div class="table-cell cell-desc">' . $gamo->r('actions')->get_action_name('submit_deal_feedback') . '</div>
+					</div>
+                    <div class="table-row row-dark">
+                    	<div class="table-cell align-left cell-amount">
+								<h2></h2>
+							</div>
+                        <div class="table-cell cell-badge">&nbsp;</div>
+						<div class="table-cell cell-desc">Submit at least ten approved deals</div>
+						</div>
+                    <div class="table-row row-light">
+                    	<div class="table-cell align-left cell-amount">
+								<h2></h2>
+							</div>
+                        <div class="table-cell cell-badge">&nbsp;</div>
+						<div class="table-cell cell-desc">Submit at least two closed deals</div>
+						</div>
+                    </div>
+				</div>
+				<div style="color:#777;font-size:1em;margin-top:10px">* Rewards limited to first 50 winners</div>
+				
+				<form role="form" class="form-horizontal" id="create-meeting-form" >
+				
+				    <div class="content widget" style="padding-bottom:0;">
+						<div class="row">
+							<div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    Earn points and prizes when you submit deals, feedback, and closed deals. All submissions are subject to review.
+								</div>
+                                
+								<div class="form-group">
+									<div class="col-sm-12 control-label">
+										<sup><img src="/img/lock-01.png"></sup> Denotes field that will lock after being submitted. If you have any questions please email contact@delloverdrive.com.
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="content connectedwidget" style="display: none;" id="error_meeting_div">
+						<div class="row">
+							<div class="col-md-12 col-sm-12 col-xs-12">
+								<div class="form-group">
+									<div class="col-sm-9" id="error_meeting" style="font-weight: bold; color: red;">
+										
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="content connectedwidget" id="main-form-div" style="padding-top:0; padding-bottom:0;">
+						<div class="row">
+							<div class="col-md-12 col-sm-12 col-xs-12">
+								<div class="form-group">
+									<div class="col-sm-9" id="error_meeting">
+										
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="meeting_name" class="col-sm-4 control-label">Contact Name</label>
+									<div class="col-sm-8">
+										<input type="text" class="form-control" id="meeting_name">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="meeting_title" class="col-sm-4 control-label">Title</label>
+									<div class="col-sm-8">
+										<input type="text" class="form-control" id="meeting_title">
+									</div>
+								</div>
+								<div class="form-group" style="display:none">
+									<label for="meeting_level" class="col-sm-4 control-label">Level<sup><img src="/img/lock-01.png"></sup></label>
+									<div class="col-sm-8" id="meeting_level_select">
+										<select class="form-control" id="meeting_level">
+											<option>Manager</option>
+											<option>C-Level</option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="meeting_company" class="col-sm-4 control-label">Company</label>
+									<div class="col-sm-8">
+										<input type="text" class="form-control" id="meeting_company">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="meeting_phone" class="col-sm-4 control-label">Phone</label>
+									<div class="col-sm-8">
+										<input type="tel" class="form-control" id="meeting_phone">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="meeting_email" class="col-sm-4 control-label">Email</label>
+									<div class="col-sm-8">
+										<input type="email" class="form-control" id="meeting_email">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="meeting_date" class="col-sm-4 control-label">Date</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control readonly" id="meeting_date" />
+									</div>
+									<div class="col-sm-4">
+										<select id="meeting_time" class="form-control">
+                                    		<option value="900">9:00 am EST</option>
+                                    		<option value="930">9:30 am EST</option>
+                                    		<option value="1000">10:00 am EST</option>
+                                    		<option value="1030">10:30 am EST</option>
+                                    		<option value="1100">11:00 am EST</option>
+                                    		<option value="1130">11:30 am EST</option>
+                                    		<option value="1200">12:00 pm EST</option>
+                                    		<option value="1230">12:30 pm EST</option>
+                                    		<option value="1300">1:00 pm EST</option>
+                                    		<option value="1330">1:30 pm EST</option>
+                                   			<option value="1400">2:00 pm EST</option>
+                                    		<option value="1430">2:30 pm EST</option>
+                                    		<option value="1500">3:00 pm EST</option>
+                                    		<option value="1530">3:30 pm EST</option>
+                                    		<option value="1600">4:00 pm EST</option>
+                                    		<option value="1630">4:30 pm EST</option>
+                                    		<option value="1700">5:00 pm EST</option>
+                                    		<option value="1730">5:30 pm EST</option>
+                                    		<option value="1800">6:00 pm EST</option>
+                                    		<option value="1830">6:30 pm EST</option>
+                                		</select>
+									</div>
+								</div>
+								<div class="form-group" style="margin-bottom:0;">
+									<label for="meeting_rep" class="col-sm-4 control-label">Deal Reg ID #</label>
+									<div class="col-sm-8" id="meeting_rep_select">
+										<input type="text" class="form-control" id="meeting_rep">
+									</div>
+								</div>	
+
+							</div>
+						</div>
+					</div>
+					<div class="content connectedwidget lightgreybackground" id="second-form-div" style="display: none;">
+						<div class="row">
+							<div class="col-md-12 col-sm-12 col-xs-12">
+								<div class="row">
+									<div class="form-group">
+										<label class="col-sm-4 control-label" style="padding-left:15px">Mark As<sup><img src="/img/lock-01.png"></sup></label>
+										<div class="col-sm-8" id="meeting_transacted_select">
+											<div class="btn-group" data-toggle="buttons">
+												<label class="btn btn-primary">
+													<input type="radio" value="1" name="transacted" id="transacted-yes">
+													Transacted </label>
+												<label class="btn btn-primary">
+													<input type="radio" value="0" name="transacted" id="transacted-no">
+													Did Not Transact </label>											
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12 col-sm-12 col-xs-12">
+								<div class="row">
+									<div class="form-group">
+										<label for="opportunity" class="col-sm-4 control-label" style="padding-left:15px">Est. Opportunity</label>
+										<div class="col-sm-8">
+											<input type="text" class="form-control" id="opportunity">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="content connectedwidget darkgreybackground"  id="third-form-div"  style="display: none;">
+						<div class="row">
+							<div class="col-md-12 col-sm-12 col-xs-12">
+								<div class="row">
+									<div class="form-group">
+										<label class="col-sm-4 control-label" style="padding-left:15px">Status<sup><img src="/img/lock-01.png"></sup></label>
+										<div class="col-sm-8" id="meeting_won_select">
+											<div class="btn-group" data-toggle="buttons">
+												<label class="btn btn-primary">
+													<input type="radio" value="1" name="won" id="won-yes">
+													Won Deal </label>
+												<label class="btn btn-primary">
+													<input type="radio" value="0" name="won" id="won-no">
+													Lost Deal </label>											
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12 col-sm-12 col-xs-12">
+								<div class="row">
+									<div class="form-group">
+										<label for="amount" class="col-sm-4 control-label" style="padding-left:15px">Deal amount</label>
+										<div class="col-sm-8">
+											<input type="text" class="form-control" id="amount">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="content connectedwidget" style="">
+						<div class="row">
+							<div class="col-md-12 col-sm-12 col-xs-12">
+								<input type="hidden" class="form-control" id="meeting_id" value="0"> 
+								<button type="button" class="btn bluebackground pull-right" id="create-meeting-submit">Submit</button>
+							</div>
+						</div>
+					</div>
+				</form>
+				
+				
+				<div class="bluebackground widget meetingfeedback">
+					<h4><strong>Meeting Feedback</strong></h4>
+					
+                    <div class="container-fluid">
+                    <div class="row meetingfeedbackheader">
+                    		<div class="col-xs-2 col-md-2">Date</div>
+                         <div class="col-xs-2 col-md-2">Activity</div>
+                         <div class="col-xs-2 col-md-2">Company</div>
+                         <div class="col-xs-2 col-md-2">Status</div>
+                         <div class="col-xs-2 col-md-2">Points</div>
+                         <div class="col-xs-2 col-md-2">&nbsp;</div>
+                    </div>
+                    </div>
+                	<div id="meeting-list-holder-pager"></div>
+				</div>
+				
+				
+			</div>
+			
+			
+			
+		</div>
+		<!-- InstanceEndEditable -->
+
+<div class="modal fade" id="meeting_success">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Success</h4>
+      </div>
+      <div class="modal-body">
+        <p id="modal_text"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" style="color: #000">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
+
+
+<script type="text/javascript">
+$(function() {
+	
+	$("#meeting_date").datepicker({ startDate: new Date("07/13/2014"), endDate: "+4w",daysOfWeekDisabled: [0,6] });
+
+	$(document).on("keyup", ".readonly", function(e) {
+	       
+        e.preventDefault();
+ 
+    });
+     
+    $(document).on("keydown", ".readonly", function(e) {
+           
+            e.preventDefault();
+     
+    });
+     
+     
+    $(document).on("paste", ".readonly", function(e) {
+           
+            e.preventDefault();
+     
+    });
+    
+});
+
+</script>
+
+'; ?>
+<?
+Core::get_element('game_footer');
+?>

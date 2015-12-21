@@ -1,0 +1,375 @@
+@font-face {
+	font-family: 'HelveticaLTStd-Bold';
+	src: url('../fonts/HelveticaLTStd-Bold.eot?') format('eot'), 
+	     url('../fonts/HelveticaLTStd-Bold.otf')  format('opentype'),
+	     url('../fonts/HelveticaLTStd-Bold.woff') format('woff'), 
+	     url('../fonts/HelveticaLTStd-Bold.ttf')  format('truetype'),
+	     url('../fonts/HelveticaLTStd-Bold.svg#HelveticaLTStd-Bold') format('svg');
+}
+
+@font-face {
+	font-family: 'HelveticaLTStd-Cond';
+	src: url('../fonts/HelveticaLTStd-Cond.eot?') format('eot'), 
+	     url('../fonts/HelveticaLTStd-Cond.otf')  format('opentype'),
+	     url('../fonts/HelveticaLTStd-Cond.woff') format('woff'), 
+	     url('../fonts/HelveticaLTStd-Cond.ttf')  format('truetype'),
+	     url('../fonts/HelveticaLTStd-Cond.svg#HelveticaLTStd-Cond') format('svg');
+}
+
+@font-face {
+	font-family: 'HelveticaLTStd-Light';
+	src: url('../fonts/HelveticaLTStd-Light.eot?') format('eot'), 
+	     url('../fonts/HelveticaLTStd-Light.otf')  format('opentype'),
+	     url('../fonts/HelveticaLTStd-Light.woff') format('woff'), 
+	     url('../fonts/HelveticaLTStd-Light.ttf')  format('truetype'),
+	     url('../fonts/HelveticaLTStd-Light.svg#HelveticaLTStd-Light') format('svg');
+}
+
+body {
+	font-family: 'HelveticaLTStd-Light';
+	background-color:#000;
+	color:#fff;
+}
+
+strong{
+	font-family: 'HelveticaLTStd-Bold';
+}
+
+a{
+	color:#fff;
+}
+
+.btn, .btn:hover{
+	border-radius:0px;
+	color:#fff;
+}
+
+.form-control{
+	border-radius:0px;
+}
+
+.navbar-brand{
+	1margin-left:-7.5px;
+	1margin-left:-11px;
+	1margin-top:-10px;
+	margin-bottom:10px;
+}
+
+.navbar-nav{
+	1margin-right:-7.5px;
+	padding-top:20px;
+}
+
+.modal-header, .modal-footer {
+	border: none;
+}
+
+.modal-content{
+	border-radius:0px;
+	background-color:#e5e5e5;
+	color:#666;
+}
+	.modal-content .btn{
+		color:#fff;
+	}
+
+.form-horizontal .control-label {
+	text-align: left;
+	font-weight:normal;
+	font-family: 'HelveticaLTStd-Light';
+}	
+
+.table-striped>tbody>tr>th
+{
+	color:#f76f0b;
+	border:none;
+	font-size:28px;
+	font-family: 'HelveticaLTStd-Bold';
+}
+
+.table-striped>tbody>tr>td
+{
+	font-size:18px;
+	line-height:43px;
+}
+
+.table-striped>tbody>tr:nth-child(odd)>td, .table-striped>tbody>tr:nth-child(odd)>th {
+	background-color: #f2f2f2;
+}
+
+.widget{
+	padding:15px 20px;
+	margin-top:15px;
+}
+	.widget h2{
+		font-family: 'HelveticaLTStd-Bold';
+		margin-top:10px;
+		text-align:center;
+	}
+	.profile h2{
+		text-align:left;
+	}
+	.widget p{
+		margin-bottom:0px;
+	}
+
+.profile{
+	background-color:#024272;
+}
+
+.points{
+	background-color:#ca0813;
+}	
+
+	.points .score{
+		text-align:center;
+		background:#fff;
+		color:#f76f0b;
+		
+		font-family: 'HelveticaLTStd-Bold';
+		font-size:50px;
+		font-style:italic;
+	}
+
+.content{
+	background-color:#fff;
+	color:#666;
+}
+
+	.content h2{
+		text-align:left;
+	}
+	
+	.content h1{
+		color:#024272;
+		font-family: 'HelveticaLTStd-Bold';
+	}
+
+.leaders{
+	background-color:#f76f0b;
+}
+
+.badges{
+	background-color:#82c341;
+}
+	
+.activity{
+	background-color:#024272;
+}
+
+
+.borderless>tbody>tr>td{
+	padding: 5px;
+	border:none;
+	font-family:'HelveticaLTStd-Light';
+	font-weight:normal;
+}
+
+.borderless>thead>tr>th{
+	padding: 5px;
+	border:none;
+	font-family:'HelveticaLTStd-Bold';
+}
+
+
+.borderless{
+	margin-bottom:0px;
+}
+
+.orange{
+	color:#f76f0b;
+}
+
+.orangebackground{
+	background-color:#f76f0b;
+}
+
+.sidebar{
+	background-color:#fff;
+}
+
+	.sidebar li{
+		border:1px solid #000;
+	}
+
+	.sidebar a, .sidebar a:hover{
+		color:#666;
+	}
+
+	.sidebar li img{
+		padding-right:5px;
+	}
+	
+.current{
+	background-color:#024272;
+	color:#fff;
+}
+
+	.current a, .current a:hover{
+		color:#fff;
+	}
+	
+.content2{
+	margin-top:15px;
+}
+
+	.content2 h1{
+		color:#fff;
+		font-family: 'HelveticaLTStd-Bold';
+		margin-top:0px;
+	}
+	
+	.content2 h1 img{
+		margin-top:2px;
+		float:left;
+		padding-right:10px;
+	}
+	
+	.content2 .content h1{
+		color:#000;
+		font-family:'HelveticaLTStd-Light';
+		margin-bottom:0px;
+	}
+	
+	.content2 .content h2{
+		color:#000;
+	}
+	
+	.content2 .pointbox{
+		font-family: 'HelveticaLTStd-Bold';
+		font-size: 50px;
+		background-color:#82c341;
+		color:#fff;
+		text-align:center;
+	}
+	
+	.content2 .content h4 {
+		font-family: 'HelveticaLTStd-Bold';
+	}
+	
+	.content2 .content .question h4{
+		color:#000;
+		font-family:'HelveticaLTStd-Light';
+	}
+	
+	.question a:hover{
+		color:white;
+		background-color:#f76f0b;
+	}
+	
+.submenu{
+	margin-top:15px;
+}
+	.submenu li a:hover{
+		color:#fff;
+		background-color:#f76f0b;
+		border-radius:0px;
+	}
+	
+	.submenu .current a:hover{
+		background-color:#024272;
+	}
+
+.bluebackground{
+	background-color:#024272;
+}
+
+	.bluebackground p{
+		font-size:31px;
+	}
+
+.meetings .media-object{
+	width:175px;
+}
+	.meetings .media-object h2{
+		text-align:left;
+	}
+	
+	.meetings .media-body{
+		font-size:18px;
+		font-family:'HelveticaLTStd-Light';
+		font-weight:normal;
+
+	}
+	
+	@media screen and (min-width: 768px) and (max-width: 991px)
+	{
+		.meetings .media-body{
+			line-height:53px;
+		}
+	}
+
+.lightgreybackground{
+	background-color:#f2f2f2;
+}
+
+.darkgreybackground{
+	background-color:#d9d9d9;
+}
+
+.connectedwidget{
+	margin-top:0px;
+	padding:15px 20px;
+}
+
+.leaderboards .score{
+	color: #024272;
+	font-family: 'HelveticaLTStd-Bold';
+	font-size:36px;
+}
+
+.leaderboards p{
+	font-size:21px;
+}
+
+.mtop15{
+	margin-top:15px;
+}
+
+.leaderboards2 h1{
+	margin-top:10px;
+	font-size:28px;
+	font-family: 'HelveticaLTStd-Bold';
+}
+
+.leaderboards2 h4{
+	margin-top:10px;
+	font-family: 'HelveticaLTStd-Bold';
+}
+.leaderboards2 .score{
+	color: #024272;
+	font-family: 'HelveticaLTStd-Bold';
+	font-size:25px;
+}
+
+.blue td{
+	color:#024272;
+	font-family: 'HelveticaLTStd-Bold';
+	font-weight:bold;
+}
+
+h3{
+	font-family: 'HelveticaLTStd-Bold';
+	1font-weight:bold;
+}
+	
+.about .def {
+	color:#024272;
+	font-family: 'HelveticaLTStd-Bold';
+	font-weight:bold;
+	font-size:16px;
+}
+
+.about a{
+	color:#024272;
+	text-decoration:underline;
+	font-weight:bold;
+}
+
+.f16 {
+	font-size: 16px;
+}
+
+.image-75 {
+	width: 99%;
+}
