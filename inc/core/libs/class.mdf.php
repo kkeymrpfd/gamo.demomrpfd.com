@@ -996,15 +996,113 @@ class Core_Mdf {
     function get_packages($options = array()) {
 
         Core::ensure_defaults(array(
-                'quarter_id' => '',
-                'vendor_entity_id' => '',
-                'bucket_category_id' => ''
+                'quarter_ids' => array(),
+                'vendor_entity_ids' => array(),
+                'bucket_category_ids' => array(),
+                'category_ids' => array()
             )
         , $options);
 
         global $dbh;
 
-        $sql = "SELECT package_id FROM " . GAMO_DB . ".packages";
+        $sql_filters = array();
+
+        if(count($options['vendor_entity_ids']) > 0) {
+
+            $vendor_entity_ids = array();
+
+            foreach($options['vendor_entity_ids'] as $k => $vendor_entity_id) {
+
+                if(is_numeric($vendor_entity_id)) {
+
+                    $vendor_entity_ids[] = (int)$vendor_entity_id;
+
+                }
+
+            }
+
+            if(count($vendor_entity_ids)) {
+
+                $sql_filters[] = "vendor_entity_id IN (" . implode(',', $vendor_entity_ids) . ")";
+
+            }
+
+        }
+
+        if(count($options['bucket_category_ids']) > 0) {
+
+            $bucket_category_ids = array();
+
+            foreach($options['bucket_category_ids'] as $k => $bucket_category_id) {
+
+                if(is_numeric($bucket_category_id)) {
+
+                    $bucket_category_ids[] = (int)$bucket_category_id;
+
+                }
+
+            }
+
+            if(count($bucket_category_ids)) {
+
+                $sql_filters[] = "bucket_category_id IN (" . implode(',', $bucket_category_ids) . ")";
+
+            }
+
+        }
+
+        if(count($options['quarter_ids']) > 0) {
+
+            $quarter_ids = array();
+
+            foreach($options['quarter_ids'] as $k => $quarter_id) {
+
+                if(is_numeric($quarter_id)) {
+
+                    $quarter_ids[] = (int)$quarter_id;
+
+                }
+
+            }
+
+            if(count($quarter_ids)) {
+
+                $sql_filters[] = "(SELECT count(*) FROM " . GAMO_DB . ".packages_info AS packages_info WHERE packages_info.package_id = packages.package_id AND packages_info.info_type = 'quarter' AND packages_info.numeric_info IN (" . implode(',', $quarter_ids) . ")) > 0";
+
+            }
+
+        }
+
+        if(count($options['category_ids']) > 0) {
+
+            $category_ids = array();
+
+            foreach($options['category_ids'] as $k => $category_id) {
+
+                if(is_numeric($category_id)) {
+
+                    $category_ids[] = (int)$category_id;
+
+                }
+
+            }
+
+            if(count($category_ids)) {
+
+                $sql_filters[] = "(SELECT count(*) FROM " . GAMO_DB . ".packages_info AS packages_info WHERE packages_info.package_id = packages.package_id AND packages_info.info_type = 'category' AND packages_info.numeric_info IN (" . implode(',', $category_ids) . ")) > 0";
+
+            }
+
+        }
+
+        $sql = "SELECT package_id FROM " . GAMO_DB . ".packages AS packages";
+
+        if(count($sql_filters)) {
+
+            $sql .= ' WHERE ' . implode(' AND ', $sql_filters);
+
+        }        
+
         $sth = $dbh->prepare($sql);
         $sth->execute();
 
@@ -1014,10 +1112,14 @@ class Core_Mdf {
 
         while($row = $sth->fetch()) {
 
-            $packages['packages'][] = self::get_package(array(
+            $include = 1;
+
+            $package = self::get_package(array(
                     'package_id' => $row['package_id']
                 )
             );
+
+            $packages['packages'][] = $package;
 
         }
 

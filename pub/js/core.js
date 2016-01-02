@@ -651,19 +651,38 @@ $(document).ready(function() {
 
      });
 
-     $('*[check-bind]').on('click', function() {
+     $('.check-bind').on('click', function(e) {
 
-          var check = $('#'+$(this).attr('check-bind'));
+		e.preventDefault();
 
-          if(!$(this).is(':checkbox')) {
+		if(!$(this).is(':checkbox')) {
 
-          	check.prop('checked', !check.prop('checked')).trigger('change');
+			var checkbox = $(this).find('input');
 
-          }
+			checkbox.prop('checked', !checkbox.prop('checked')).trigger('change');
+
+			var fontweight = (checkbox.prop('checked')) ? 'bold' : 'normal';
+
+			$(this).find('span').css('fontWeight', fontweight);
+
+		} else {
+
+			$(this).find('span').trigger('click');
+
+		}
 
      }).on('mouseenter', function() {
 
      	$(this).css('cursor', 'pointer');
+
+     });
+
+     $('.check-bind').each(function() {
+
+     	var checkbox = $(this).find('input');
+		var fontweight = (checkbox.prop('checked')) ? 'bold' : 'normal';
+
+		$(this).find('span').css('fontWeight', fontweight);
 
      });
 
@@ -696,8 +715,35 @@ $(document).ready(function() {
 
      }
      
-     //Core.adjustHeights('#badge-h3'); 
-     
+    $("select, input").on('change', function() {
+    	Core.log('here');
+    	var id = $(this).attr('id');
+
+    	if(id != undefined) {
+
+    		var val = $(this).val();
+
+    		$("[data-show-if-id='"+id+"']").each(function() {
+
+    			if($(this).attr('data-show-if-value') == val) {
+
+    				$(this).fadeIn(250);
+
+    			} else {
+
+    				$(this).hide();
+
+    			}
+
+    		});
+
+    	}
+
+    });   
+
+    $("select, input").trigger('change');
+
+    $(".datepicker").datepicker();
 
 });
 

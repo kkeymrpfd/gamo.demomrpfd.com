@@ -1,0 +1,192 @@
+$data['mdf']['order_form'] = [
+	[
+		'name' => "Parter Information",
+		'fields' => [
+			[
+				'id' => "parter_contact_name",
+				'label' => "Partner Contact Name",
+				'type' => "text",
+				'required' => 1,
+				'prefill' => "user_full_name"
+			],
+			[
+				'id' => "partner_contact_number",
+				'label' => "Partner Contact Phone",
+				'type' => "text",
+				'required' => 1,
+				'prefill' => "user_phone",
+				'validate' => [
+					'min_length' => 10
+				]
+			],
+			[
+				'id' => "partner_contact_email",
+				'label' => "Partner Contact Email",
+				'type' => "text",
+				'required' => 1,
+				'prefill' => "user_phone",
+				'validate' => [
+					'is_email' => 1
+				]
+			]
+		]
+	],
+	[
+		'name' => "Target Details",
+		'fields' => [
+			[
+				'id' => "message_topic",
+				'label' => "Message Topic",
+				'type' => "select",
+				'required' => 0,
+				'options' => [
+					[
+						'value' => "software",
+						'label' => "Software",
+						'bucket_require' => "software"
+					],
+					[
+						'value' => "enterprise",
+						'label' => "Enterprise",
+						'bucket_require' => "enterprise"
+					],
+					[
+						'value' => "client",
+						'label' => "Client",
+						'bucket_require' => "client"
+					]
+				]
+			],
+			[
+				'id' => "message_topic_exact",
+				'label' => "",
+				'type' => "radio_group",
+				'required' => 0,
+				'show_if' => [
+					'id' => "message_topic",
+					'value' => "client"
+				]
+				'groups' => [
+					[
+						'group_name' => "Productivity",
+						'options' => [
+							"Notebooks", "Desktops"
+						]
+					],
+					[
+						'group_name' => "Mobility",
+						'options' => [
+							"Tablets", "Tablets 2-in-1s"
+						]
+					],
+					[
+						'group_name' => "Performance",
+						'options' => [
+							"Workstations", "Ruggedized Systems"
+						]
+					]
+				]
+			],
+			[
+				'id' => "start_date",
+				'label' => "Campaign Start Date",
+				'type' => "date"
+			],
+			[
+				'id' => "sfdc_campaign_code",
+				'label' => "SFDC Campaign Code",
+				'type' => "text"
+			],
+			[
+				'id' => "geography",
+				'label' => "Geography",
+				'type' => "select",
+				'required' => 0,
+				'options' => [
+					[
+						'value' => "none",
+						'label' => "Please select an option"
+					],
+					[
+						'value' => "city_radius",
+						'label' => "City Radius"
+					],
+					[
+						'value' => "area_codes",
+						'label' => "Area Codes"
+					]
+				]
+			],
+			[
+				'id' => "state",
+				'label' => "State",
+				'type' => "text",
+				'show_if' => [
+					'id' => "geography",
+					'value' => "city_radius"
+				]
+			],
+			[
+				'id' => "city",
+				'label' => "City Name",
+				'type' => "text",
+				'show_if' => [
+					'id' => "geography",
+					'value' => "city_radius"
+				]
+			],
+			[
+				'id' => "radius",
+				'label' => "Radius",
+				'type' => "text",
+				'show_if' => [
+					'id' => "geography",
+					'value' => "city_radius"
+				]
+			],
+			[
+				'id' => "state",
+				'label' => "State",
+				'type' => "text",
+				'show_if' => [
+					'id' => "geography",
+					'value' => "city_radius"
+				]
+			],
+			[
+				'id' => "area_codes",
+				'label' => "Area Codes",
+				'type' => "text",
+				'show_if' => [
+					'id' => "geography",
+					'value' => "area_codes"
+				]
+			],
+			[
+				'type' => "checkbox_group",
+				'options' => [
+					[
+						'id' => "employee_size_0_to_99",
+						'label' => "1 - 99",
+					],
+					[
+						'id' => "employee_size_100_to_249",
+						'label' => "100 - 249",
+					],
+					[
+						'id' => "employee_size_250_to_499",
+						'label' => "250 - 499",
+					],
+					[
+						'id' => "employee_size_500_to_999",
+						'label' => "500 - 999",
+					],
+					[
+						'id' => "employee_size_1000_to_5000",
+						'label' => "1000 to 5000",
+					]
+				]
+			]
+		]
+	]
+];

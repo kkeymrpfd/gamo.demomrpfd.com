@@ -18,77 +18,21 @@ $data['mdf']['categories'] = Core::r('categories')->get_categories(array(
 	)
 );
 
-switch(count($data['mdf']['wallet']['buckets'])) {
-	case 2:
-		$bucket_col_size = 6;
-		break;
-	case 3:
-		$bucket_col_size = 4;
-		break;
-	default:
-		$bucket_col_size = 12;
-}
-
 Core::get_element('game_header');
 ?>
 <? $view_output .= '
 <link rel="stylesheet" type="text/css" href="/css/datepicker.css">
 <script src="/js/bootstrap-datepicker.js"></script>
-<script src="/js/gamo/meeting.js?t=4"></script>
+<script src="/js/gamo/mdf.js?t=' . time() . '"></script>
 <script src="/js/pager.js?t=1"></script>
 <div class="row">
 	<div class="col-md-4 col-sm-4 col-xs-12 submenu hidden-xs">
 '; ?>
-	<? Core::get_element('game_nav'); ?>
+<? Core::get_element('game_nav'); ?>
+<? Core::get_element('mdf_menu_buckets'); ?>
+<? Core::get_element('mdf_menu_vendors'); ?>
+<? Core::get_element('mdf_menu_categories'); ?>
 <? $view_output .= '
-	<div class="panel panel-info" style="margin-top:1.5em">
-		<div class="panel-heading">
-			<h3 class="panel-title">Line of Business</h3> 
-		</div>
-		<div class="panel-body">
-'; ?>
-<? foreach($data['mdf']['wallet']['buckets'] as $k => $bucket) { ?>
-<? $view_output .= '
-			<div class="check-toggle" style="margin:5px 0px">
-				<input type="checkbox"> <span style="position:relative;top:-3px">' . $bucket['bucket_name'] . '</span>
-			</div>
-'; ?>
-<? } ?>
-<? $view_output .= '
-		</div>
-	</div>
-	<div class="panel panel-info" style="margin-top:1.5em">
-		<div class="panel-heading">
-			<h3 class="panel-title">Vendor</h3> 
-		</div>
-		<div class="panel-body">
-'; ?>
-<? foreach($data['mdf']['vendors'] as $k => $vendor) { ?>
-<? $view_output .= '
-			<div class="check-toggle" style="margin:5px 0px">
-				<input type="checkbox"> <span style="position:relative;top:-3px">' . $vendor['name'] . '</span>
-			</div>
-'; ?>
-<? } ?>
-<? $view_output .= '
-		</div>
-	</div>
-	<div class="panel panel-info" style="margin-top:1.5em">
-		<div class="panel-heading">
-			<h3 class="panel-title">Program Types</h3> 
-		</div>
-		<div class="panel-body">
-'; ?>
-<? foreach($data['mdf']['categories'] as $k => $category) { ?>
-<? $view_output .= '
-			<div class="check-toggle" style="margin:5px 0px">
-				<input type="checkbox"> <span style="position:relative;top:-3px">' . $category['category_name'] . '</span>
-			</div>
-'; ?>
-<? } ?>
-<? $view_output .= '
-		</div>
-	</div>
 </div>
 <div class="col-md-9 col-sm-9 col-xs-12 content2">
 
@@ -99,52 +43,10 @@ Core::get_element('game_header');
 	<div class="row center" style="font-size:1.5em;margin:10px">
 	Funding Available
 	</div>
-	<div class="row">
 '; ?>
-<? foreach($data['mdf']['wallet']['buckets']  as $k => $bucket) { ?>
+<? Core::get_element('mdf_buckets'); ?>
 <? $view_output .= '
-		<div class="col-sm-' . $bucket_col_size . ' col-md-' . $bucket_col_size . ' col-lg-' . $bucket_col_size . '">
-			<div class="panel panel-info panel-fill">
-				<div class="panel-heading center">
-					<h3 class="panel-title">' . $bucket['bucket_name'] . '</h3> 
-				</div>
-				<div class="panel-body center funding-text"> $' . round($bucket['balance']) . ' </div>
-			</div>
-		</div>
-'; ?>
-<? } ?>
-<? $view_output .= '
-	</div>
-'; ?>
-<? foreach($data['mdf']['packages']['packages'] as $k => $package) { ?>
-<? $view_output .= '
-	<div class="row">
-		<div class="col-lg-12">
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h3 class="panel-title">' . $package['vendor_name'] . ' - ' . $package['name'] . ' <div class="pull-right">' . $package['display_price'] . '</div></h3>
-				</div>
-				<div class="panel-body" style="font-size:1em">
-					<div class="row">
-						<div class="col-lg-3">
-							<b>Program Type</b>
-							<br>' . implode(',', $package['category_names']) . '
-							<br><br><b>Line of Business</b>
-							<br>' . $package['bucket_name'] . '
-						</div>
-						<div class="col-lg-9">
-							<b>Deliverables</b><br>
-							' . $package['description'] . '
-						</div>
-					</div>
-					<button class="btn btn-primary pull-right" style="margin-top:12px">Order</button>
-				</div>
-			</div>
-		</div>
-	</div>
-'; ?>
-<? } ?>
-<? $view_output .= '
+	<div id="mdf-packages-list"></div>
 </div>
 			
 			
