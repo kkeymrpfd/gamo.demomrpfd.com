@@ -1083,7 +1083,7 @@ class Core_Mdf {
                 'datetime' => Core::datetime()
             )
         , $options);
-
+        
         if(!is_numeric($options['amount'])) {
 
             return Core::error("The wallet history amount must be a valid number");
@@ -1139,6 +1139,20 @@ class Core_Mdf {
         if(!is_numeric($options['bucket_category_id'])) {
 
             return Core::error("Invalid bucket type specified when creating wallet history entry");
+
+        }
+
+        if($options['is_target_amount'] == 1) {
+
+            $k = Core::multi_find($wallet['buckets'], 'bucket_category_id', $options['bucket_category_id']);
+
+            if($k != -1) {
+
+                $current_balance = $wallet['buckets'][$k]['balance'];
+                
+                $options['amount'] = $options['amount'] - $current_balance;
+
+            }
 
         }
 
@@ -1200,9 +1214,27 @@ class Core_Mdf {
         Core::ensure_defaults(array(
                 'wallet_id' => '',
                 'entity_id' => '',
-                'quarter_id' => ''
+                'quarter_id' => '',
+                'user_id' => '',
+                'all_buckets' => 0
             )
         , $options);
+
+        if($options['user_id'] != '') {
+
+            $partner = self::get_user_partner([
+                'user_id' => $options['user_id']
+            ]);
+
+            if(Core::has_error($partner)) {
+
+                return $partner;
+
+            }
+
+            $options['entity_id'] = $partner['entity_id'];
+
+        }
 
         if($options['entity_id'] != '' && $options['quarter_id'] != '' && !is_numeric($options['wallet_id'])) {
 
@@ -1279,6 +1311,26 @@ class Core_Mdf {
         while($row = $sth->fetch()) {
 
             $wallet['buckets'][] = Core::remove_numeric_keys($row);
+
+        }
+
+        if($options['all_buckets'] == 1) {
+
+            $bucket_types = self::get_bucket_types();
+
+            foreach($bucket_types as $k => $bucket_type) {
+
+                if(Core::multi_find($wallet['buckets'], 'bucket_category_id', $bucket_type['bucket_category_id']) == -1) {
+
+                    $wallet['buckets'][] = [
+                        'bucket_category_id' => $bucket_type['bucket_category_id'],
+                        'bucket_name' => $bucket_type['bucket_name'],
+                        'balance' => 0
+                    ];
+
+                }
+
+            }
 
         }
 
