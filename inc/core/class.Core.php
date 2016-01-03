@@ -410,7 +410,8 @@ class Core {
 		Core::ensure_defaults(array(
 			'dbh' => &$dbh,
 			'delayed' => 0,
-			'cache' => 0
+			'cache' => 0,
+			'unique' => []
 		), $options);
 
 		if($options['delayed'] == 1) {
@@ -429,10 +430,25 @@ class Core {
 
         $sql = 'INSERT INTO ' . $options['table'] . ' (' . implode(',', array_keys($options['values'])) . ') VALUES (' . implode(',', array_keys($values)) . ')';
         $sth = $options['dbh']->prepare($sql);
+        
+        if(count($options['unique'])) {
+
+        	$c = Core::db_count([
+        		'table' => $options['table'],
+        		'values' => $options['unique']
+        	]);
+
+        	if($c > 0) {
+
+        		return Core::error("Record already exists");
+
+        	}
+
+        };
 
         try {
 
-       		$sth->execute($values);
+        	$sth->execute($values);
 
        	} catch(Exception $e) {
 
@@ -854,6 +870,24 @@ class Core {
 		}
 
 		return $options;
+
+	}
+
+	function ensure_numeric($var) {
+
+		if(!is_array($var)) {
+
+			return (int)$var;
+
+		}
+
+		foreach($var as $k => $v) {
+
+			$var[$k] = (int)$v;
+
+		}
+
+		return $var;
 
 	}
 

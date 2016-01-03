@@ -3,14 +3,16 @@ class Core_Mdf {
 
     public $errors; // Store error codes
     public $wallet_history_types;
+    public $packages;
 
     function __construct() {
 
-        $this->wallet_history_types = array('order', 'order_adjustment', 'fund_adjustment');
+        $this->wallet_history_types = array('order', 'order_adjustment', 'order_delete', 'fund_adjustment');
+        $this->packages = [];
 
     }
 
-    function create_partner($options = array()) {
+    function create_partner($options = []) {
 
         Core::ensure_defaults(array(
                 'name' => '',
@@ -90,7 +92,7 @@ class Core_Mdf {
 
     }
 
-    function create_vendor($options = array()) {
+    function create_vendor($options = []) {
 
         Core::ensure_defaults(array(
                 'name' => ''
@@ -137,12 +139,12 @@ class Core_Mdf {
 
     }
     
-    function create_info($options = array()) {
+    function create_info($options = []) {
 
         Core::ensure_defaults(array(
                 'table' => GAMO_DB . '.entities_info',
-                'values' => array(),
-                'unique' => array()
+                'values' => [],
+                'unique' => []
             )
         , $options);
 
@@ -186,7 +188,7 @@ class Core_Mdf {
 
     }
 
-    function assign_user_to_partner($options = array()) {
+    function assign_user_to_partner($options = []) {
 
         Core::ensure_defaults(array(
                 'user_id' => '',
@@ -247,7 +249,6 @@ class Core_Mdf {
                 'user_id' => $options['user_id'],
                 'info_type' => 'partner',
                 'int_info' => $options['partner_entity_id']
-
             )
         );
 
@@ -264,6 +265,367 @@ class Core_Mdf {
         return array(
             'assigned' => 1
         );
+
+    }
+
+    function get_user_partner($options = []) {
+
+        Core::ensure_defaults([
+            'user_id' => ''
+        ], $options);
+
+        $partner_entity_id = Core::fetch_column(
+            "SELECT int_info FROM " . GAMO_DB . ".users_info WHERE user_id = :user_id AND info_type = 'partner' LIMIT 0, 1",
+            array(
+                ':user_id' => $options['user_id']
+            )
+        );
+
+        if(!is_numeric($partner_entity_id)) {
+
+            return Core::error("Could not find this user's partner ID");
+
+        }
+
+        $partner = self::get_entity([
+            'entity_id' => $partner_entity_id
+        ]);
+
+        return $partner;
+
+    }
+
+    function save_activity($options = []) {
+
+        Core::ensure_defaults([
+            'user_id' => -1,
+            'package_id' => -1,
+            'quarter_id' => -1,
+            'mdf_activity_id' => -1,
+            'packages_option_id' => -1,
+            'form' => []
+        ], $options);
+
+        if($options['mdf_activity_id'] != -1) {
+
+            $activity = Core::r('mdf')->get_activities([
+                'mdf_activity_ids' => [$options['mdf_activity_id']]
+            ]);
+
+            if(count($activity['activities']) != 1) {
+
+                return Core::error("Invalid activity ID specified. Please refresh the page and try again.");
+
+            }
+
+            $activity = $activity['activities'][0];
+            $options['package_id'] = $activity['package_id'];
+
+        }
+
+        $package = self::get_package([
+            'package_id' => $options['package_id']
+        ]);
+
+        if(Core::has_error($package)) {
+
+            return $package;
+
+        }
+
+        $partner = self::get_user_partner([
+            'user_id' => $options['user_id']
+        ]);
+
+        if(Core::has_error($partner)) {
+
+            return $partner;
+
+        }
+
+        // Ensure that package option ID is valid
+        $k = Core::multi_find($package['packages_options'], 'packages_option_id', $options['packages_option_id']);
+
+        $price = 0;
+
+        if($k == -1) {
+
+            return Core::error("The specified package option is not valid for this package");
+
+        }
+
+        $price = $package['packages_options'][$k]['price'];
+
+        // Ensure that the quarter id is valid
+        $k = Core::multi_find($package['packages_info'], [
+            'info_type' => 'quarter',
+            'numeric_info' => $options['quarter_id']
+        ]);
+
+        if($k == -1) {
+
+            return Core::error("Invalid quarter specified for this package");
+
+        }
+
+        $has_funds_price = $price;
+
+        if($options['mdf_activity_id'] != -1) {
+
+            $has_funds_price = $price - $activity['price'];
+
+        }
+
+        $has_funds = self::entity_has_funds(array(
+                'entity_id' => $partner['entity_id'],
+                'quarter_id' => $options['quarter_id'],
+                'bucket_category_id' => $package['bucket_category_id'],
+                'amount' => $has_funds_price
+            )
+        );
+
+        if(Core::has_error($has_funds)) {
+
+            return $has_funds;
+
+        }
+
+        $validate = self::validate_form([
+            'form_config' => $package['order_form']['form'],
+            'form' => $options['form']
+        ]);
+
+        if(Core::has_error($validate)) {
+
+            return $validate;
+
+        }
+
+        $action_type = Core::r('actions')->action_types_id('create_mdf_activity');
+
+        if($action_type == false) {
+
+            return Core::error("Could not find create mdf activity action type");
+
+        }
+
+        if($options['mdf_activity_id'] == -1) {
+
+            $mdf_activity_id = Core::unique_string(16);
+
+            $wallet_history = self::create_wallet_history([
+                'entity_id' => $partner['entity_id'],
+                'quarter_id' => $options['quarter_id'],
+                'bucket_category_id' => $package['bucket_category_id'],
+                'user_id' => $options['user_id'],
+                'reference_id' => $mdf_activity_id,
+                'type' => 'order',
+                'amount' => $price*-1
+            ]);
+
+            if(Core::has_error($wallet_history)) {
+
+                return $wallet_history;
+
+            }
+
+            $action_id = Core::r('actions')->create_action([
+                'action_types_id' => $action_type,
+                'user_id' => $options['user_id'],
+                'int_other' => $partner['entity_id'],
+                'other' => $options['package_id'],
+                'other_b' => $mdf_activity_id,
+                'other_c' => $options['quarter_id']
+            ]);
+
+        } else {
+
+            $mdf_activity_id = $options['mdf_activity_id'];
+
+            Core::db_delete([
+                'table' => GAMO_DB . ".actions_info",
+                'where' => [
+                    'action_id' => $activity['action_id'],
+                    'info_type' => 'mdf_field'
+                ]
+            ]);
+
+            $action_id['action_id'] = $activity['action_id'];
+
+        }
+
+        foreach($options['form'] as $field_id => $val) {
+
+            Core::db_delete([
+                'table' => GAMO_DB . ".actions_info",
+                'where' => [
+                    'action_id' => $action_id['action_id'],
+                    'info_type' => 'mdf_field',
+                    'info' => $field_id,
+                    '!info_b' => $val
+                ]
+            ]);
+            
+            $insert = Core::db_insert([
+                'table' => GAMO_DB . ".actions_info",
+                'values' => array(
+                    'action_id' => $action_id['action_id'],
+                    'info_type' => 'mdf_field',
+                    'info' => $field_id,
+                    'info_b' => $val,
+                    'time' => Core::datetime()
+                ),
+                'unique' => array(
+                    'action_id' => $action_id['action_id'],
+                    'info_type' => 'mdf_field',
+                    'info' => $field_id
+                )
+            ]);
+
+        }
+
+        return array(
+            'mdf_activity_id' => $mdf_activity_id
+        );
+
+    }
+
+    function entity_has_funds($options = []) {
+
+        Core::ensure_defaults([
+            'entity_id' => -1,
+            'bucket_category_id' => -1,
+            'amount' => 0,
+            'quarter_id' => 0
+        ], $options);
+
+        $wallet = self::get_wallet([
+            'entity_id' => $options['entity_id'],
+            'quarter_id' => $options['quarter_id']
+        ]);
+
+        if(Core::has_error($wallet)) {
+
+            return $wallet;
+
+        }
+
+        $k = Core::multi_find($wallet['buckets'], 'bucket_category_id', $options['bucket_category_id']);
+
+        if($k == -1) {
+
+            return Core::error("You do not have enough funds to order this package option");
+
+        }
+
+        $bucket = $wallet['buckets'][$k];
+
+        if($bucket['balance'] < $options['amount']) {
+
+            return Core::error("You do not have enough funds to order this package option");
+
+        }
+
+        return true;
+
+    }
+
+    function validate_form($options = []) {
+
+        Core::ensure_defaults([
+            'form_config' => [],
+            'form' => []
+        ], $options);
+        
+        unset($options['form']['undefined']);
+
+        $save_fields = [];
+
+        foreach($options['form_config'] as $k => $section) {
+
+            foreach($section['fields'] as $k2 => $field) {
+
+                if(isset($field['required']) && $field['required'] == 1) {
+
+                    if(!isset($options['form'][$field['id']]) || trim($options['form'][$field['id']]) == '') {
+
+                        return Core::error("The field '" . $field['label'] . "' is required");
+
+                    }
+
+                }
+
+                if(isset($field['validate'])) {
+
+                    if(isset($field['validate']['is_email']) && $field['validate']['is_email'] == 1) {
+
+                        $check = Core::r('users')->validate_email([
+                            'email' => $options['form'][ $field['id'] ],
+                            'unique_check' => 0
+                        ]);
+
+                        if(Core::has_error($check)) {
+
+                            return Core::error("The field '" . $field['label'] . "' must be a valid email address");
+
+                        }
+
+                    }
+
+                }
+
+                if($field['type'] == 'select'
+                    && Core::multi_find($field['options'], 'value', $options['form'][ $field['id'] ]) == -1) {
+
+                    return Core::error("The option selected for '" . $field['label'] . "' does not appear valid. Please refresh the page and try again.");
+
+                }
+
+                if(isset( $options['form'][ $field['id'] ] )) {
+
+                    $save_fields[ $field['id'] ] = $options['form'][ $field['id'] ];
+
+                }
+
+            }
+
+        }
+
+        return $save_fields;
+
+    }
+
+    function assign_order_form_to_package($options = []) {
+
+        Core::ensure_defaults([
+            'package_id' => '',
+            'mdf_form_id' => ''
+        ], $options);
+
+        Core::db_delete(array(
+                'table' => GAMO_DB . ".packages_info",
+                'where' => array(
+                    'package_id' => $options['package_id'],
+                    'info_type' => 'order_form',
+                    '!numeric_info' => $options['mdf_form_id']
+                )
+            )
+        );
+
+        $values = [
+            'package_id' => $options['package_id'],
+            'info_type' => 'order_form',
+            'numeric_info' => $options['mdf_form_id']
+        ];
+
+        $save = self::create_info(array(
+                'table' => GAMO_DB . ".packages_info",
+                'values' => $values,
+                'unique' => $values
+            )
+        );
+
+        return $save;
 
     }
 
@@ -342,7 +704,7 @@ class Core_Mdf {
 
     }
 
-    function create_wallet($options = array()) {
+    function create_wallet($options = []) {
 
         Core::ensure_defaults(array(
                 'entity_id' => '',
@@ -400,7 +762,7 @@ class Core_Mdf {
 
     }
 
-    function get_entities($options = array()) {
+    function get_entities($options = []) {
 
         Core::ensure_defaults(array(
                 'type' => ''
@@ -416,7 +778,7 @@ class Core_Mdf {
             )
         );
 
-        $entities = array();
+        $entities = [];
 
         while($row = $sth->fetch()) {
 
@@ -428,7 +790,34 @@ class Core_Mdf {
 
     }
 
-    function create_package($options = array()) {
+    function get_entity($options = []) {
+
+        Core::ensure_defaults([
+            'entity_id' => -1
+        ], $options);
+
+        global $dbh;
+
+        $sql = "SELECT entity_id, name, type FROM " . GAMO_DB . ".entities WHERE entity_id = :entity_id";
+        $sth = $dbh->prepare($sql);
+        $sth->execute(array(
+                ':entity_id' => $options['entity_id']
+            )
+        );
+
+        $entity = $sth->fetch();
+
+        if(!is_array($entity)) {
+
+            return Core::error("Could not find entity based on specified ID");
+
+        }
+
+        return Core::remove_numeric_keys($entity);
+
+    }
+
+    function create_package($options = []) {
 
         Core::ensure_defaults(array(
                 'vendor_entity_id' => '',
@@ -518,7 +907,7 @@ class Core_Mdf {
 
     }
 
-    function create_packages_option($options = array()) {
+    function create_packages_option($options = []) {
 
         Core::ensure_defaults(array(
                 'package_id' => '',
@@ -572,7 +961,7 @@ class Core_Mdf {
 
     }
 
-    function assign_package_to_quarter($options = array()) {
+    function assign_package_to_quarter($options = []) {
 
         Core::ensure_defaults(array(
                 'package_id' => '',
@@ -607,7 +996,7 @@ class Core_Mdf {
 
     }
 
-    function assign_package_to_category($options = array()) {
+    function assign_package_to_category($options = []) {
 
         Core::ensure_defaults(array(
                 'package_id' => '',
@@ -642,7 +1031,7 @@ class Core_Mdf {
 
     }
 
-    function unassign_package_from_category($options = array()) {
+    function unassign_package_from_category($options = []) {
 
         Core::ensure_defaults(array(
                 'package_id' => '',
@@ -676,7 +1065,7 @@ class Core_Mdf {
 
     }
 
-    function create_wallet_history($options = array()) {
+    function create_wallet_history($options = []) {
 
         Core::ensure_defaults(array(
                 'wallet_id' => '',
@@ -708,6 +1097,8 @@ class Core_Mdf {
             return $wallet;
 
         }
+
+        $options['wallet_id'] = $wallet['wallet_id'];
 
         $c = Core::db_count(array(
                 'table' => GAMO_DB . ".wallets",
@@ -752,7 +1143,7 @@ class Core_Mdf {
         }
 
         $save = array(
-            'wallet_id' => $options['wallet_id'],
+            'wallet_id' => $wallet['wallet_id'],
             'bucket_category_id' => $options['bucket_category_id'],
             'entity_id' => $wallet['entity_id'],
             'user_id' => $options['user_id'],
@@ -784,7 +1175,27 @@ class Core_Mdf {
 
     }
 
-    function get_wallet($options = array()) {
+    function get_bucket_types() {
+
+        global $dbh;
+
+        $sql = "SELECT category_id AS bucket_category_id, category_name AS bucket_name FROM " . GAMO_DB . ".categories WHERE category_type = 'mdf_bucket_type'";
+        $sth = $dbh->prepare($sql);
+        $sth->execute();
+
+        $bucket_types = [];
+
+        while($row = $sth->fetch()) {
+
+            $bucket_types[] = Core::remove_numeric_keys($row);
+
+        }
+
+        return $bucket_types;
+
+    }
+
+    function get_wallet($options = []) {
 
         Core::ensure_defaults(array(
                 'wallet_id' => '',
@@ -803,7 +1214,7 @@ class Core_Mdf {
 
             }
 
-            $options['quarter_id'] = self::ensure_quarter_id($options['entity_id']);
+            $options['quarter_id'] = self::ensure_quarter_id($options['quarter_id']);
 
             if(!is_numeric($options['quarter_id'])) {
 
@@ -863,7 +1274,7 @@ class Core_Mdf {
             )
         );
 
-        $wallet['buckets'] = array();
+        $wallet['buckets'] = [];
 
         while($row = $sth->fetch()) {
 
@@ -875,12 +1286,18 @@ class Core_Mdf {
 
     }
 
-    function get_package($options = array()) {
+    function get_package($options = []) {
 
         Core::ensure_defaults(array(
                 'package_id' => ''
             )
         , $options);
+
+        if(isset($this->packages[$options['package_id']])) {
+
+            return $this->packages[$options['package_id']];
+
+        }
 
         global $dbh;
 
@@ -921,7 +1338,7 @@ class Core_Mdf {
 
         }
 
-        $package['packages_options'] = array();
+        $package['packages_options'] = [];
         $package['min_price'] = 9999999999;
         $package['max_price'] = -999999999;
 
@@ -949,9 +1366,9 @@ class Core_Mdf {
         }
 
         $package['display_price'] = ($package['min_price'] == $package['max_price']) ? '$' . round($package['min_price']) : '$' . round($package['min_price']) . ' to $' . round($package['max_price']); 
-        $package['category_names'] = array();
+        $package['category_names'] = [];
 
-        $package['packages_info'] = array();
+        $package['packages_info'] = [];
 
         $sql = "SELECT
         packages_info_id,
@@ -970,6 +1387,8 @@ class Core_Mdf {
             )
         );
 
+        $order_form = -1;
+
         while($row = $sth->fetch()) {    
 
             if($row['info_type'] == 'category') {
@@ -987,29 +1406,361 @@ class Core_Mdf {
 
             $package['packages_info'][] = Core::remove_numeric_keys($row);
 
+            if($row['info_type'] == 'order_form') {
+
+                $order_form = $row['numeric_info'];
+
+            }
+
         }
 
-        return Core::remove_numeric_keys($package);
+        $package['order_form'] = self::get_form([
+            'mdf_form_id' => $order_form
+        ]);
+
+        if(!Core::has_error($package['order_form'])) {
+
+            $investment_levels = [];
+            $investment_levels_fields = [];
+
+            foreach($package['packages_options'] as $k => $option) {
+
+                $investment_levels[] = [
+                    'value' => $option['packages_option_id'],
+                    'label' => '$' . $option['price']*1
+                ];
+
+                $investment_levels_fields[] = [
+                    'id' => 'packages_option_id_' . $option['packages_option_id'],
+                    'type' => 'content_block',
+                    'show_if' => [
+                        'id' => 'packages_option_id',
+                        'value' => $option['packages_option_id']
+                    ],
+                    'content' => $option['description']
+                ];
+
+            }
+
+            array_unshift($investment_levels_fields, [
+                'id' => "packages_option_id",
+                'label' => "Investment Level",
+                'type' => "select",
+                'required' => 0,
+                'options' => $investment_levels
+            ]);
+
+            array_unshift($package['order_form']['form'], [
+                'name' => 'Package Selection',
+                'fields' => $investment_levels_fields
+            ]);
+
+        }
+
+        $package = Core::remove_numeric_keys($package);
+
+        $this->packages[$options['package_id']] = $package;
+
+        return $package;
 
     }
 
-    function get_packages($options = array()) {
+    function get_form($options = []) {
+
+        Core::ensure_defaults([
+            'mdf_form_id' => -1
+        ]);
+
+        global $dbh;
+
+        $sql = "SELECT mdf_form_id, form, description FROM " . GAMO_DB . ".mdf_forms WHERE mdf_form_id = :mdf_form_id";
+        $sth = $dbh->prepare($sql);
+        $sth->execute([
+            'mdf_form_id' => $options['mdf_form_id']
+        ]);
+
+        $row = $sth->fetch();
+
+        if(!is_array($row)) {
+
+            return Core::error("Could not find the specified form");
+
+        }
+
+        $row['form'] = json_decode($row['form'], true);
+
+        return Core::remove_numeric_keys($row);
+
+    }
+
+    function delete_activity($options = []) {
+
+        global $dbh;
+
+        Core::ensure_defaults([
+            'mdf_activity_id' => '',
+            'user_id' => -1
+        ], $options);
+
+        $activity = self::get_activities([
+            'mdf_activity_ids' => [$options['mdf_activity_id']]
+        ]);
+
+        if(Core::has_error($activity)) {
+
+            return Core::error("This activity could not be found. Please refresh the page and try again.");
+        }
+
+        $activity = $activity['activities'][0];
+
+        $balance = Core::fetch_column(
+            "SELECT SUM(amount) FROM " . GAMO_DB . ".wallets_history WHERE reference_id = :reference_id",
+            array(
+                ':reference_id' => $options['mdf_activity_id']
+            )
+        );
+
+        $wallet_history = [];
+        
+        if($balance < 0) {
+            
+            $sql = "SELECT wallet_id, bucket_category_id, entity_id FROM " . GAMO_DB . ".wallets_history WHERE reference_id = :reference_id AND type = 'order' ORDER BY datetime DESC LIMIT 0, 1";
+            $sth = $dbh->prepare($sql);
+            $sth->execute([
+                ':reference_id' => $options['mdf_activity_id']
+            ]);
+
+            $wallet_history = $sth->fetch();
+
+            if(!is_array($wallet_history)) {
+
+                return Core::error("Could not properly local wallet history for this activity. Please contact " . ADMIN_EMAIL . " for further assistance.");
+
+            }
+
+        }
+
+        $update = Core::r('actions')->modify_action([
+            'action_id' => $activity['action_id'],
+            'values' => 'delete'
+        ]);
+
+        if(Core::has_error($update)) {
+
+            return Core::error("There was an error while deleting this activity. Please refresh the page and try again.");
+
+        }
+
+        if($balance < 0) {
+
+            $history = self::create_wallet_history([
+                'wallet_id' => $wallet_history['wallet_id'],
+                'entity_id' => $wallet_history['entity_id'],
+                'bucket_category_id' => $wallet_history['bucket_category_id'],
+                'user_id' => $options['user_id'],
+                'reference_id' => $options['mdf_activity_id'],
+                'type' => 'order_delete',
+                'amount' => $balance * -1
+            ]);
+
+            if(Core::has_error($history)) {
+
+                return Core::error("There was an error while deleting this activity. Please refresh the page and try again.");
+
+            }
+
+        }
+
+        return array(
+            'deleted' => 1
+        );
+
+    }
+
+    function get_activities($options = []) {
+
+        global $dbh;
 
         Core::ensure_defaults(array(
-                'quarter_ids' => array(),
-                'vendor_entity_ids' => array(),
-                'bucket_category_ids' => array(),
-                'category_ids' => array()
+                'mdf_activity_ids' => [],
+                'quarter_ids' => [],
+                'vendor_entity_ids' => [],
+                'bucket_category_ids' => [],
+                'category_ids' => [],
+                'partner_entity_ids' => [],
+            )
+        , $options);
+
+        if(!is_array($options['quarter_ids'])) { $options['quarter_ids'] = []; }
+        if(!is_array($options['vendor_entity_ids'])) { $options['vendor_entity_ids'] = []; }
+        if(!is_array($options['bucket_category_ids'])) { $options['bucket_category_ids'] = []; }
+        if(!is_array($options['category_ids'])) { $options['category_ids'] = []; }
+        if(!is_array($options['partner_entity_ids'])) { $options['partner_entity_ids'] = []; }
+
+        /*
+        'int_other' => $partner['entity_id'],
+            'other' => $options['package_id'],
+            'other_b' => $mdf_activity_id,
+            'other_c' => $options['quarter_id']
+            */
+
+        $action_type = Core::r('actions')->action_types_id('create_mdf_activity');
+
+        $sql_filters = [];
+
+        $params = [
+            ':action_types_id' => $action_type
+        ];
+
+        if(count($options['mdf_activity_ids'])) {
+
+            $mdf_activity_ids = [];
+            
+            foreach($options['mdf_activity_ids'] as $k => $mdf_activity_id) {
+
+                $mdf_activity_ids[] = addslashes($mdf_activity_id);
+                
+            }
+            
+            $sql_filters[] = "other_b IN ('" . implode("','", $mdf_activity_ids) . "')";
+
+        }
+
+        if(count($options['partner_entity_ids'])) {
+
+            $options['partner_entity_ids'] = Core::ensure_numeric($options['partner_entity_ids']);
+
+            $sql_filters[] = "int_other IN (" . implode(",", $options['partner_entity_ids']) . ")";
+
+        }
+
+        if(count($options['quarter_ids'])) {
+
+            $options['quarter_ids'] = Core::ensure_numeric($options['quarter_ids']);
+
+            $sql_filters[] = "other_c IN (" . implode(",", $options['quarter_ids']) . ")";
+
+        }
+
+
+        if(count($options['vendor_entity_ids'])) {
+
+            $options['vendor_entity_ids'] = Core::ensure_numeric($options['vendor_entity_ids']);
+
+            $sql_filters[] = "(SELECT count(*) FROM " . GAMO_DB . ".packages AS packages WHERE packages.package_id = actions_log.other AND packages.vendor_entity_id IN (" . implode(",", $options['vendor_entity_ids']) . ")) > 0";
+
+        }
+
+        if(count($options['bucket_category_ids'])) {
+
+            $options['bucket_category_ids'] = Core::ensure_numeric($options['bucket_category_ids']);
+
+            $sql_filters[] = "(SELECT count(*) FROM " . GAMO_DB . ".packages AS packages WHERE packages.package_id = actions_log.other AND packages.bucket_category_id IN (" . implode(",", $options['bucket_category_ids']) . ")) > 0";
+
+        }
+
+        if(count($options['category_ids'])) {
+
+            $options['category_ids'] = Core::ensure_numeric($options['category_ids']);
+
+            $sql_filters[] = "(SELECT count(*) FROM " . GAMO_DB . ".packages_info AS packages_info WHERE packages_info.package_id = actions_log.other AND packages_info.info_type = 'category' AND packages_info.numeric_info IN (" . implode(",", $options['category_ids']) . ")) > 0";
+
+        }
+
+        $sql = "SELECT
+        action_id,
+        action_types_id,
+        user_id,
+        point_value_used,
+        int_other AS partner_entity_id,
+        other AS package_id,
+        other_b AS mdf_activity_id,
+        other_c AS quarter_id,
+        time
+        FROM " . GAMO_DB . ".actions_log AS actions_log
+        WHERE
+        action_types_id = :action_types_id
+        AND active = 1
+        ";
+
+        if(count($sql_filters)) {
+
+            $sql .= ' AND ' . implode(" AND ", $sql_filters);
+
+        }
+        
+        $sth = $dbh->prepare($sql);
+        $sth->execute($params);
+
+        $activities = [];
+
+        $sql_fields = "SELECT info, info_b FROM " . GAMO_DB . ".actions_info WHERE action_id = :action_id AND info_type = 'mdf_field'";
+        $fields_sth = $dbh->prepare($sql_fields);
+
+        while($row = $sth->fetch()) {
+            
+            Core::remove_numeric_keys($row);
+
+            $row['fields'] = [];
+
+            $fields_sth->execute([
+                ':action_id' => $row['action_id']
+            ]);
+
+            while($field = $fields_sth->fetch()) {
+
+                $row['fields'][$field['info']] = $field['info_b'];
+
+            }
+
+            $row['package'] = self::get_package([
+                'package_id' => $row['package_id']
+            ]);
+
+            unset($row['package']['order_form']);
+
+            $row['price'] = Core::fetch_column(
+                "SELECT SUM(amount) FROM " . GAMO_DB . ".wallets_history WHERE reference_id = :reference_id AND type = 'order'",
+                array(
+                    ':reference_id' => $row['mdf_activity_id']
+                )
+            );
+
+            $row['price'] *= -1;
+            
+            $k = Core::multi_find($row['package']['packages_options'], 'packages_option_id', $row['fields']['packages_option_id']);
+
+            $row['package_option'] = $row['package']['packages_options'][$k];
+
+            $row['display_order_date'] = date("M j, Y", strtotime($row['time']));
+
+            $activities[] = $row;
+
+        }
+
+        return array(
+            'activities' => $activities
+        );
+
+    }
+
+    function get_packages($options = []) {
+
+        Core::ensure_defaults(array(
+                'quarter_ids' => [],
+                'vendor_entity_ids' => [],
+                'bucket_category_ids' => [],
+                'category_ids' => []
             )
         , $options);
 
         global $dbh;
 
-        $sql_filters = array();
+        $sql_filters = [];
 
         if(count($options['vendor_entity_ids']) > 0) {
 
-            $vendor_entity_ids = array();
+            $vendor_entity_ids = [];
 
             foreach($options['vendor_entity_ids'] as $k => $vendor_entity_id) {
 
@@ -1031,7 +1782,7 @@ class Core_Mdf {
 
         if(count($options['bucket_category_ids']) > 0) {
 
-            $bucket_category_ids = array();
+            $bucket_category_ids = [];
 
             foreach($options['bucket_category_ids'] as $k => $bucket_category_id) {
 
@@ -1053,7 +1804,7 @@ class Core_Mdf {
 
         if(count($options['quarter_ids']) > 0) {
 
-            $quarter_ids = array();
+            $quarter_ids = [];
 
             foreach($options['quarter_ids'] as $k => $quarter_id) {
 
@@ -1075,7 +1826,7 @@ class Core_Mdf {
 
         if(count($options['category_ids']) > 0) {
 
-            $category_ids = array();
+            $category_ids = [];
 
             foreach($options['category_ids'] as $k => $category_id) {
 
@@ -1107,7 +1858,7 @@ class Core_Mdf {
         $sth->execute();
 
         $packages = array(
-            'packages' => array()
+            'packages' => []
         );
 
         while($row = $sth->fetch()) {

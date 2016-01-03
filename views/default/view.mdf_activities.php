@@ -1,6 +1,5 @@
 <?
 
-
 $data['mdf']['wallet'] = Core::r('mdf')->get_wallet(array(
         'wallet_id' => 2
     )
@@ -37,17 +36,11 @@ Core::get_element('game_header');
 <div class="col-md-9 col-sm-9 col-xs-12 content2">
 
 	<div>
-		<div class="module-title" style="display:inline-block">MDF</div>
-		<div style="display:inline-block;margin-right:1em" class="pull-right"><a href="/?p=mdf_activities" class="btn btn-primary">View Order History / Marketing Activities</a></div>
+		<div class="module-title" style="display:inline-block">MDF Activities</div>
+		<div style="display:inline-block;margin-right:1em" class="pull-right"><a href="/?p=mdf" class="btn btn-primary">Return to order screen</a></div>
 	</div>
 	<div id="mdf_result_h" style="margin:20px 0px;display:none"></div>
-	<div class="row center" style="font-size:1.5em;margin:10px">
-	Funding Available
-	</div>
-'; ?>
-<? Core::get_element('mdf_buckets'); ?>
-<? $view_output .= '
-	<div id="mdf-packages-list"></div>
+	<div id="mdf-activities-list" style="margin-top:30px"></div>
 </div>
 			
 			
@@ -58,18 +51,7 @@ Core::get_element('game_header');
 $(document).ready(function() {
 
 	gamo.page_two_cols();
-	mdf.get_packages();
-
-'; ?>
-<? if($session->get('mdf_saved') == 1) { ?>
-<? $view_output .= '
-Core.modal({
-	msg: "Your order has been saved!",
-	alert: "success"
-});
-'; ?>
-<? } ?>
-<? $view_output .= '
+	mdf.get_activities();
 
 });
 

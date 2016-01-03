@@ -36,10 +36,11 @@ Core::get_element('game_header');
 </div>
 <div class="col-md-9 col-sm-9 col-xs-12 content2">
 
-	<div class="hidden-xs">
-		<div class="module-title">MDF</div>
+	<div>
+		<div class="module-title" style="display:inline-block">MDF</div>
+		<div style="display:inline-block;margin-right:1em" class="pull-right"><a href="/?p=mdf_activities" class="btn btn-primary">View Order History / Marketing Activities</a></div>
 	</div>
-
+	<div id="mdf_result_h" style="margin:20px 0px;display:none"></div>
 	<div class="row center" style="font-size:1.5em;margin:10px">
 	Funding Available
 	</div>
@@ -57,6 +58,18 @@ Core::get_element('game_header');
 $(document).ready(function() {
 
 	gamo.page_two_cols();
+	mdf.get_packages();
+
+/end_view
+<? if($session->get('mdf_saved') == 1) { ?>
+/start_view
+Core.modal({
+	msg: "Your order has been saved!",
+	alert: "success"
+});
+/end_view
+<? } ?>
+/start_view
 
 });
 
@@ -64,4 +77,5 @@ $(document).ready(function() {
 /end_view
 <?
 Core::get_element('page_footer');
+$session->remove('mdf_saved');
 ?>

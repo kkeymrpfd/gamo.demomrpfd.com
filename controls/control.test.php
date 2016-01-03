@@ -7,6 +7,26 @@ class Control_Test {
 		
 		global $data, $page_settings, $models, $session, $gamo, $dbh;
 
+        /*
+        $sql = "SELECT package_id FROM " . GAMO_DB . ".packages";
+        $sth = $dbh->prepare($sql);
+        $sth->execute();
+
+        while($row = $sth->fetch()) {
+
+            $result = Core::r('mdf')->assign_order_form_to_package(array(
+                    'package_id' => $row['package_id'],
+                    'mdf_form_id' => 1
+                )
+            );
+
+            Core::print_r($result);
+
+        }
+
+        die();
+        */
+
         $result = Core::r('mdf')->create_wallet_history(array(
                 'wallet_id' => 2,
                 'amount' => 15000,

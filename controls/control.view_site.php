@@ -56,7 +56,8 @@ class Control_View_Site {
 			'demandgen_comingsoon',
 			'dg_landing',
 			'mdf',
-			'mdf_order'
+			'mdf_order',
+			'mdf_activities'
 		);
 
 		$no_header = array(

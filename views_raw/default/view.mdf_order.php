@@ -1,293 +1,50 @@
 <?
-$data['mdf']['order_form'] = [
-	[
-		'name' => "Partner Information",
-		'fields' => [
-			[
-				'id' => "parter_contact_name",
-				'label' => "Partner Contact Name",
-				'type' => "text",
-				'required' => 1,
-				'prefill' => "user_full_name"
-			],
-			[
-				'id' => "partner_contact_number",
-				'label' => "Partner Contact Phone",
-				'type' => "text",
-				'required' => 1,
-				'prefill' => "user_phone",
-				'validate' => [
-					'min_length' => 10
-				]
-			],
-			[
-				'id' => "partner_contact_email",
-				'label' => "Partner Contact Email",
-				'type' => "text",
-				'required' => 1,
-				'prefill' => "user_email",
-				'validate' => [
-					'is_email' => 1
-				]
-			]
-		]
-	],
-	[
-		'name' => "Target Details",
-		'fields' => [
-			[
-				'id' => "message_topic",
-				'label' => "Message Topic",
-				'type' => "select",
-				'required' => 0,
-				'options' => [
-					[
-						'value' => "software",
-						'label' => "Software",
-						'bucket_require' => "software"
-					],
-					[
-						'value' => "enterprise",
-						'label' => "Enterprise",
-						'bucket_require' => "enterprise"
-					],
-					[
-						'value' => "client",
-						'label' => "Client",
-						'bucket_require' => "client"
-					]
-				]
-			],
-			[
-				'id' => "message_topic_client",
-				'label' => "",
-				'type' => "radio_group",
-				'required' => 0,
-				'show_if' => [
-					'id' => "message_topic",
-					'value' => "client"
-				],
-				'groups' => [
-					[
-						'group_name' => "Productivity",
-						'options' => [
-							"Notebooks", "Desktops"
-						]
-					],
-					[
-						'group_name' => "Mobility",
-						'options' => [
-							"Tablets", "Tablets 2-in-1s"
-						]
-					],
-					[
-						'group_name' => "Performance",
-						'options' => [
-							"Workstations", "Ruggedized Systems"
-						]
-					]
-				]
-			],
-			[
-				'id' => "message_topic_software",
-				'label' => "",
-				'type' => "radio_group",
-				'required' => 0,
-				'show_if' => [
-					'id' => "message_topic",
-					'value' => "software"
-				],
-				'groups' => [
-					[
-						'group_name' => "Software",
-						'options' => [
-							"KACE", "Data Protection", "SonicWALL"
-						]
-					]
-				]
-			],
-			[
-				'id' => "message_topic_enterprise",
-				'label' => "",
-				'type' => "radio_group",
-				'required' => 0,
-				'show_if' => [
-					'id' => "message_topic",
-					'value' => "enterprise"
-				],
-				'groups' => [
-					[
-						'group_name' => "Converged Solutions",
-						'options' => [
-							"PowerEdge FX Architecture", "PowerEdge VRTX", "Nutanix with Citrix", "EVO:Rail with VMware"
-						]
-					],
-					[
-						'group_name' => "Modernize and transform the network",
-						'options' => [
-							"Software-defined networking", "Data center networking", "Campus / office networking"
-						]
-					],
-					[
-						'group_name' => "Your scale to hyperscale",
-						'options' => [
-							"13G PowerEdge servers", "X86 Server transition"
-						]
-					],
-					[
-						'group_name' => "Cloud client-computing",
-						'options' => [
-							"End-to-end desktop virtualization solutions for Citrix, Microsoft, VMware and Wyse vWorkspace"
-						]
-					],
-					[
-						'group_name' => "Redefining the economics of storage",
-						'options' => [
-							"Flash at the price of disk", "Mid-range SAN", "SC4000", "SC4020", "Flash Leadership", "SCv2000", "Software-defined storage", "Storage Solutions"
-						]
-					]				
-				]
-			],
-			[
-				'id' => "start_date",
-				'label' => "Campaign Start Date",
-				'type' => "date"
-			],
-			[
-				'id' => "sfdc_campaign_code",
-				'label' => "SFDC Campaign Code",
-				'type' => "text"
-			],
-			[
-				'id' => "geography",
-				'label' => "Geography",
-				'type' => "select",
-				'required' => 0,
-				'options' => [
-					[
-						'value' => "none",
-						'label' => "Please select an option"
-					],
-					[
-						'value' => "city_radius",
-						'label' => "City Radius"
-					],
-					[
-						'value' => "area_codes",
-						'label' => "Area Codes"
-					]
-				]
-			],
-			[
-				'id' => "state",
-				'label' => "State",
-				'type' => "text",
-				'show_if' => [
-					'id' => "geography",
-					'value' => "city_radius"
-				]
-			],
-			[
-				'id' => "city",
-				'label' => "City Name",
-				'type' => "text",
-				'show_if' => [
-					'id' => "geography",
-					'value' => "city_radius"
-				]
-			],
-			[
-				'id' => "radius",
-				'label' => "Radius",
-				'type' => "text",
-				'show_if' => [
-					'id' => "geography",
-					'value' => "city_radius"
-				]
-			],
-			[
-				'id' => "area_codes",
-				'label' => "Area Codes",
-				'type' => "text",
-				'show_if' => [
-					'id' => "geography",
-					'value' => "area_codes"
-				]
-			],
-			[
-				'id' => "employee_size",
-				'type' => "checkbox_list",
-				'label' => 'Employee Size',
-				'options' => [
-					[
-						'id' => "employee_size_0_to_99",
-						'label' => "1 - 99",
-					],
-					[
-						'id' => "employee_size_100_to_249",
-						'label' => "100 - 249",
-					],
-					[
-						'id' => "employee_size_250_to_499",
-						'label' => "250 - 499",
-					],
-					[
-						'id' => "employee_size_500_to_999",
-						'label' => "500 - 999",
-					],
-					[
-						'id' => "employee_size_1000_to_5000",
-						'label' => "1000 to 5000",
-					]
-				]
-			]
-		]
-	]
-];
-
 $data['mdf']['package_id'] = Core::get_input('package_id', 'get');
+$data['mdf']['mdf_activity_id'] = Core::get_input('mdf_activity_id', 'get');
+
+$save_text = 'Order';
+
+if($data['mdf']['mdf_activity_id'] != '') {
+
+	$data['mdf']['activity'] = Core::r('mdf')->get_activities([
+		'mdf_activity_ids' => [$data['mdf']['mdf_activity_id']]
+	]);
+
+	if(count($data['mdf']['activity']['activities']) != 1) {
+
+		header("Location: /");
+		die();
+
+	}
+
+	$data['mdf']['activity'] = $data['mdf']['activity']['activities'][0];
+	$data['mdf']['package_id'] = $data['mdf']['activity']['package_id'];
+	$save_text = 'Save';
+
+}
 
 $data['mdf']['package'] = Core::r('mdf')->get_package(array(
 		'package_id' => $data['mdf']['package_id']
 	)
 );
 
-$investment_levels = [];
-$investment_levels_fields = [];
+if(!isset($data['mdf']['package']['vendor_name'])) {
 
-foreach($data['mdf']['package']['packages_options'] as $k => $option) {
-
-	$investment_levels[] = [
-		'value' => $option['packages_option_id'],
-		'label' => '$' . $option['price']*1
-	];
-
-	$investment_levels_fields[] = [
-		'id' => 'investment_level_' . $option['packages_option_id'],
-		'type' => 'content_block',
-		'show_if' => [
-			'id' => 'investment_level',
-			'value' => $option['packages_option_id']
-		],
-		'content' => $option['description']
-	];
+	header("Location: /");
+	die();
 
 }
 
-array_unshift($investment_levels_fields, [
-	'id' => "investment_level",
-	'label' => "Investment Level",
-	'type' => "select",
-	'required' => 0,
-	'options' => $investment_levels
-]);
-
-array_unshift($data['mdf']['order_form'], [
-	'name' => 'Package Selection',
-	'fields' => $investment_levels_fields
-]);
-
 Core::get_element('game_header');
+
+$saved_fields = '';
+
+if($data['mdf']['mdf_activity_id'] != '') {
+
+	$saved_fields = 'mdf.mdf_activity_id = "' . $data['mdf']['mdf_activity_id'] . '";mdf.prefill("' . str_replace('"', '\"', json_encode($data['mdf']['activity']['fields'])) . '");';
+
+}
+
 ?>
 /start_view
 <link rel="stylesheet" type="text/css" href="/css/datepicker.css">
@@ -302,14 +59,16 @@ Core::get_element('game_header');
 	</div>
 	<div class="col-md-9 col-sm-9 col-xs-12 content2">
 
+		<form id="mdf-order-form" style="margin:0px">
 		<div class="hidden-xs">
 			<div class="module-title">MDF Order Form</div>
 		</div>
+		<div id="mdf_order_result_h" style="margin:20px 0px"></div>
 		<div style="font-weight:bold;font-size:1.3em;margin:10px 0px 20px 0px">
 			' . $data['mdf']['package']['vendor_name'] . ' - ' . $data['mdf']['package']['name'] . '
 		</div>
 /end_view
-		<? foreach($data['mdf']['order_form'] as $k => $section) {
+		<? foreach($data['mdf']['package']['order_form']['form'] as $k => $section) {
 		
 			$view_output .= '<div style="font-size:1.2em;font-weight:bold;background-color:#eee;padding:0.5em;margin:10px 0px">' . $section['name'] . '</div>';
 
@@ -371,7 +130,17 @@ Core::get_element('game_header');
 
 					foreach($field['options'] as $k3 => $option) {
 
-						$view_output .= '<option value="' . $option['value'] . '">' . $option['label'] . '</option>';
+						if(!isset($option['bucket_require']) || $option['bucket_require'] == $data['mdf']['package']['bucket_category_id']) {
+
+							if($field['id'] != 'packages_option_id'
+								|| $data['mdf']['mdf_activity_id'] == ''
+								|| $field['id'] == 'packages_option_id' && $data['mdf']['mdf_activity_id'] != '' && $option['value'] == $data['mdf']['activity']['fields']['packages_option_id']) {
+
+								$view_output .= '<option value="' . $option['value'] . '">' . $option['label'] . '</option>';
+
+							}
+
+						}
 
 					}
 
@@ -379,7 +148,7 @@ Core::get_element('game_header');
 
 				} else if($field['type'] == 'radio_group') {
 
-					$view_output .= '<div class="row" style="margin:20px 10px" ' . $show_if . '>';
+					$view_output .= '<div class="row" style="margin:20px 10px 10px 40px;text-align:center" ' . $show_if . '>';
 
 					$end = max(count($field['groups']) - 1, 0);
 
@@ -391,7 +160,7 @@ Core::get_element('game_header');
 
 						}
 
-						$view_output .= '<div class="col-sm-4 col-lg-4">
+						$view_output .= '<div class="col-sm-4 col-lg-4" style="text-align:left;margin-bottom:15px">
 						<div style="font-weight:bold">' . $group['group_name'] . '</div>';
 
 						foreach($group['options'] as $k4 => $option) {
@@ -445,10 +214,11 @@ Core::get_element('game_header');
 /start_view
 		<center>
 			<div style="margin:20px 0px 50px 0px">
-				<div class="btn btn-default" style="color:#666">Cancel</div>
-				<div class="btn btn-primary" style="margin-left:30px">Order</div>
+				<button class="btn btn-default" style="color:#666">Cancel</button>
+				<button type="submit" class="btn btn-primary" style="margin-left:30px">' . $save_text . '</button>
 			</div>
 		</center>
+		</form>
 	</div>			
 </div>
 		<!-- InstanceEndEditable -->
@@ -456,6 +226,10 @@ Core::get_element('game_header');
 $(document).ready(function() {
 
 	gamo.page_two_cols();
+	$(".datepicker").datepicker();
+	mdf.use_package_id = "' . $data['mdf']['package_id'] . '";
+	mdf.use_quarter_id = "1";
+	' . $saved_fields . '
 
 });
 

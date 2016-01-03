@@ -1,0 +1,50 @@
+<?
+// Generate the data for the home page of the site
+// @depend core/class.Core.php
+class Control_Mdf_Save_Activity {
+
+	function run() {
+		
+		global $data, $page_settings, $models, $session, $gamo, $dbh;
+
+		$page_settings['allow_json'] = 1;
+
+		Core::authorize(array(
+				'user_id' => 'get'
+			)
+		);
+
+		$sql = "TRUNCATE " . GAMO_DB . ".actions_log";
+		$sth = $dbh->prepare($sql);
+		$sth->execute();
+
+		$sql = "TRUNCATE " . GAMO_DB . ".actions_info";
+		$sth = $dbh->prepare($sql);
+		$sth->execute();
+
+		//$_GET['mdf_form']['partner_contact_name'] = '';
+		//$_GET['mdf_form']['partner_contact_email'] = 'test@test.com';
+		//$_GET['mdf_form']['message_topic'] = 'test';
+		
+		$result = Core::r('mdf')->save_order([
+			'user_id' => $data['user_id'],
+			'package_id' => Core::get_input('package_id', 'get'),
+			'packages_option_id' => Core::get_input('packages_option_id', 'get'),
+			'quarter_id' => Core::get_input('quarter_id', 'get'),
+			'form' => Core::get_input('mdf_form', 'get')
+		]);
+
+		$data['result'] = $result;
+
+		if(!Core::has_error($result)) {
+
+			$session->set('mdf_saved', 1);
+
+		}
+
+		return $data;
+
+	}
+
+}
+?>

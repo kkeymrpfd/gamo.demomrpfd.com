@@ -130,7 +130,7 @@ var Core = new function() {
 			title: '!',
 			msg: '',
 			header: 0,
-			footer: '<button class="btn" data-dismiss="modal" aria-hidden="true">Okay</button>',
+			footer: '<button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Okay</button>',
 			alert: '',
 			close: 0,
 			hide: 0
@@ -156,7 +156,7 @@ var Core = new function() {
 			  + '</div>'
 			+ '</div>';
 
-			$('body').append(html);
+			$(html).appendTo('body');
 
 		}
 
@@ -211,26 +211,39 @@ var Core = new function() {
 		options = Core.ensure_defaults({
 			holder: '',
 			replace: '',
-			replace_with: ''
+			replace_with: '',
+			visible_only: false
 		}, options);
 		
 		var inputs = {};
 		
 		$(options['holder']).find(':input').each(function() {
 			
-			inputs[ ($(this).attr('id')+'').replace(options['replace'], options['replace_with']) ] = $(this).val();
+			if(!options.visible_only || options.visible_only && $(this).is(':visible')) {
+
+				inputs[ ($(this).attr('id')+'').replace(options['replace'], options['replace_with']) ] = $(this).val();
+
+			}
 
 		});
 
 		$(options['holder']).find(':checkbox').each(function() {
 			
-			inputs[ ($(this).attr('id')+'').replace(options['replace'], options['replace_with']) ] = ($(this).prop('checked')) ? 1 : 0;
+			if(!options.visible_only || options.visible_only && $(this).is(':visible')) {
+
+				inputs[ ($(this).attr('id')+'').replace(options['replace'], options['replace_with']) ] = ($(this).prop('checked')) ? 1 : 0;
+
+			}
 
 		});
 		
 		$(options['holder']).find(':radio').each(function() {
 			
-			inputs[ ($(this).attr('id')+'').replace(options['replace'], options['replace_with']) ] = ($(this).prop('checked')) ? 1 : 0;
+			if(!options.visible_only || options.visible_only && $(this).is(':visible')) {
+
+				inputs[ ($(this).attr('id')+'').replace(options['replace'], options['replace_with']) ] = ($(this).prop('checked')) ? 1 : 0;
+
+			}
 
 		});
 
@@ -421,6 +434,12 @@ var Core = new function() {
 	  return (str + '').replace(/^([a-z\u00E0-\u00FC])|\s+([a-z\u00E0-\u00FC])/g, function ($1) {
 	    return $1.toUpperCase();
 	  });
+	}
+
+	this.has_error = function(v) {
+
+		return ('error_code' in v);
+
 	}
 
 	this.safe_echo = function(string, quote_style, charset, double_encode) {
@@ -665,6 +684,14 @@ $(document).ready(function() {
 
 			$(this).find('span').css('fontWeight', fontweight);
 
+			$("input[name='"+checkbox.attr('name')+"']").each(function() {
+
+				var fontweight = ($(this).prop('checked')) ? 'bold' : 'normal';
+
+				$(this).parent().find('span').css('fontWeight', fontweight);
+
+			});
+
 		} else {
 
 			$(this).find('span').trigger('click');
@@ -716,7 +743,7 @@ $(document).ready(function() {
      }
      
     $("select, input").on('change', function() {
-    	Core.log('here');
+    	
     	var id = $(this).attr('id');
 
     	if(id != undefined) {
@@ -742,8 +769,6 @@ $(document).ready(function() {
     });   
 
     $("select, input").trigger('change');
-
-    $(".datepicker").datepicker();
 
 });
 
