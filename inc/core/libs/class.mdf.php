@@ -188,16 +188,17 @@ class Core_Mdf {
 
     }
 
-    function assign_user_to_partner($options = []) {
+    function assign_user_to_entity($options = []) {
 
         Core::ensure_defaults(array(
                 'user_id' => '',
-                'partner_entity_id' => ''
+                'entity_id' => '',
+                'qty' => 0
             )
         , $options);
-
+        
         if(!is_numeric($options['user_id'])) {
-
+            echo "part2";
             $options['user_id'] = Core::fetch_column(
                 "SELECT user_id FROM " . GAMO_DB . ".users WHERE email = :email",
                 array(
@@ -207,12 +208,12 @@ class Core_Mdf {
 
             if(!is_numeric($options['user_id'])) {
 
-                return Core::error("User could not be found based on email address for user to partner assignment");
+                return Core::error("User could not be found based on email address for user to entity assignment");
 
             }
 
         }
-
+        
         $c = Core::db_count(array(
                 'table' => GAMO_DB . ".users",
                 'values' => array(
@@ -222,43 +223,59 @@ class Core_Mdf {
         );
 
         if($c == 0) {
-
-            return Core::error("User could not be found based on user id for user to partner assignment");
+            
+            return Core::error("User could not be found based on user id for user to entity assignment");
 
         }
 
-       $options['partner_entity_id'] = self::ensure_entity_id($options['partner_entity_id']);
+        if($options['entity_id'] != 'none') {
 
-       if(Core::has_error($options['partner_entity_id'])) {
+            $options['entity_id'] = self::ensure_entity_id($options['entity_id']);
 
-            return $options['partner_entity_id'];
+           if(Core::has_error($options['entity_id'])) {
+                
+                return $options['entity_id'];
 
-       }
+           }
+       
+            $entity = self::get_entity([
+                'entity_id' => $options['entity_id']
+            ]);
 
-        Core::db_delete(array(
-                'table' => GAMO_DB . ".users_info",
-                'where' => array(
+        }
+
+        global $dbh;
+        $sql = "DELETE FROM " . GAMO_DB . ".users_info WHERE user_id = :user_id AND info_type IN ('vendor', 'partner')";
+        $sth = $dbh->prepare($sql);
+        $sth->execute([
+            ':user_id' => $options['user_id']
+        ]);
+
+        $c = Core::fetch_column(
+            "SELECT count(*) FROM " . GAMO_DB . ".users_info WHERE user_id = :user_id AND info_type IN ('vendor', 'partner')",
+            array(
+                ':user_id' => $options['user_id']
+            )
+        );
+
+        if($options['entity_id'] != 'none') {
+
+            $users_info_id = Core::r('users')->create_user_info(array(
                     'user_id' => $options['user_id'],
-                    'info_type' => 'partner',
-                    '!int_info' => $options['partner_entity_id']
+                    'info_type' => $entity['type'],
+                    'int_info' => $options['entity_id']
                 )
-            )
-        );
+            );
 
-        $users_info_id = Core::r('users')->create_user_info(array(
-                'user_id' => $options['user_id'],
-                'info_type' => 'partner',
-                'int_info' => $options['partner_entity_id']
-            )
-        );
+            if(Core::has_error($users_info_id)) {
 
-        if(Core::has_error($users_info_id)) {
+                if($users_info_id['error_code'] != 13) { // error code 13 means that this assignment already exists. It's not actually an error.
+                    
+                    return $users_info_id;
 
-            if($users_info_id['error_code'] != 13) { // error code 13 means that this assignment already exists. It's not actually an error.
+                }   
 
-                return $users_info_id;
-
-            }   
+            }
 
         }
 
@@ -268,30 +285,180 @@ class Core_Mdf {
 
     }
 
-    function get_user_partner($options = []) {
+    function get_quarters($options = []) {
 
-        Core::ensure_defaults([
-            'user_id' => ''
-        ], $options);
+        global $dbh;
 
-        $partner_entity_id = Core::fetch_column(
-            "SELECT int_info FROM " . GAMO_DB . ".users_info WHERE user_id = :user_id AND info_type = 'partner' LIMIT 0, 1",
-            array(
-                ':user_id' => $options['user_id']
-            )
-        );
+        $sql = "SELECT quarter_id, name, start_date, end_date, sort, active FROM " . GAMO_DB . ".quarters ORDER BY sort ASC";
+        $sth = $dbh->prepare($sql);
+        $sth->execute();
 
-        if(!is_numeric($partner_entity_id)) {
+        $quarters = [];
 
-            return Core::error("Could not find this user's partner ID");
+        while($row = $sth->fetch()) {
+
+            $quarters[] = Core::remove_numeric_keys($row);
 
         }
 
-        $partner = self::get_entity([
-            'entity_id' => $partner_entity_id
+        return $quarters;
+
+    }
+
+    function save_entity($options = []) {
+
+        Core::ensure_defaults([
+            'name' => '',
+            'type' => 'partner',
+            'entity_id' => -1
+        ], $options);
+
+        if(!is_numeric($options['entity_id']) || $options['entity_id'] < 0) {
+
+            $options['entity_id'] = -1;
+
+        }
+
+        $options['name'] = ltrim(rtrim($options['name']));
+
+        $c = Core::db_count([
+            'table' => GAMO_DB . ".entities",
+            'values' => [
+                'name' => $options['name'],
+                'type' => $options['type'],
+                '!entity_id' => $options['entity_id']
+            ]
         ]);
 
-        return $partner;
+        if($c > 0) {
+
+            return Core::error("There is already " . $options['type'] . " with this name.");
+
+        }
+
+
+        if($options['name'] == '') {
+
+            return Core::error("Please enter a valid name for this " . $options['type']);
+
+        }
+
+        if(strlen($options['name']) > 100) {
+
+            return Core::error("The name of a " . $options['type'] . " cannot be more than 100 characters long");
+
+        }
+
+        if($options['entity_id'] != -1) {
+
+            $c = Core::db_count([
+                'table' => GAMO_DB . ".entities",
+                'values' => [
+                    'entity_id' => $options['entity_id']
+                ]
+            ]);
+
+            if($c == 0) {
+
+                return Core::error("Invalid entity specified. Please refresh the page and try again.");
+
+            }
+
+            Core::db_update([
+                'table' => GAMO_DB . ".entities",
+                'values' => [
+                    'name' => $options['name']
+                ],
+                'where' => [
+                    'entity_id' => $options['entity_id']
+                ]
+            ]);
+
+            return array(
+                'saved' => 1
+            );
+
+        }
+
+        if($options['type'] != 'partner' && $options['type'] != 'vendor') {
+
+            return Core::error("Invalid type specified. Please refresh the page and try again.");
+
+        }
+
+        $entity_id = Core::db_insert([
+            'table' => GAMO_DB . ".entities",
+            'values' => [
+                'name' => $options['name'],
+                'type' => $options['type']
+            ]
+        ]);
+
+        if(!is_numeric($entity_id)) {
+
+            return Core::error("There was an error while creating your record. Please refresh the page and try again.");
+
+        }
+
+        $quarters = self::get_quarters();
+
+        foreach($quarters as $k => $quarter) {
+
+            $wallet = self::create_wallet([
+                'entity_id' => $entity_id,
+                'quarter_id' => $quarter['quarter_id']
+            ]);
+
+        }
+
+        return array(
+            'saved' => 1,
+            'entity_id' => $entity_id
+        );
+
+    }
+
+    function get_user_entity($options = []) {
+
+        Core::ensure_defaults([
+            'user_id' => '',
+            'type' => ''
+        ], $options);
+
+        $params = [
+            ':user_id' => $options['user_id']
+        ];
+
+        $type = '';
+
+        if($options['type'] != '') {
+
+            $type = ' AND info_type = :type';
+            $params[':type'] = $options['type'];
+
+        } else {
+
+            $type = " AND info_type IN ('vendor', 'partner')";
+
+        }
+
+        $sql = "SELECT int_info FROM " . GAMO_DB . ".users_info WHERE user_id = :user_id" . $type . " LIMIT 0, 1";
+
+        $entity_id = Core::fetch_column($sql, $params);
+        
+        if(!is_numeric($entity_id)) {
+
+            return Core::error("Could not find this user's entity ID");
+
+        }
+
+
+
+        $entity = self::get_entity([
+            'entity_id' => $entity_id
+        ]);
+
+        return $entity;
 
     }
 
@@ -333,8 +500,9 @@ class Core_Mdf {
 
         }
 
-        $partner = self::get_user_partner([
-            'user_id' => $options['user_id']
+        $partner = self::get_user_entity([
+            'user_id' => $options['user_id'],
+            'type' => 'partner'
         ]);
 
         if(Core::has_error($partner)) {
@@ -771,12 +939,19 @@ class Core_Mdf {
 
         global $dbh;
 
-        $sql = "SELECT entity_id, name, type FROM " . GAMO_DB . ".entities WHERE type = :type";
+        $params = [];
+
+        $sql = "SELECT entity_id, name, type FROM " . GAMO_DB . ".entities";
+
+        if($options['type'] != '') {
+
+            $sql .= ' WHERE type = :type';
+            $params[':type'] = $options['type'];
+
+        }
+
         $sth = $dbh->prepare($sql);
-        $sth->execute(array(
-                ':type' => $options['type']
-            )
-        );
+        $sth->execute($params);
 
         $entities = [];
 
@@ -1222,8 +1397,9 @@ class Core_Mdf {
 
         if($options['user_id'] != '') {
 
-            $partner = self::get_user_partner([
-                'user_id' => $options['user_id']
+            $partner = self::get_user_entity([
+                'user_id' => $options['user_id'],
+                'type' => 'partner'
             ]);
 
             if(Core::has_error($partner)) {

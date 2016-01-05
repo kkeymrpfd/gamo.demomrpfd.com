@@ -155,7 +155,7 @@ var mdf = new function() {
 										+activities[k]['package_option']['description']
 									+'</div>'
 								+'</div>'
-								+'<div class="pull-right">'
+								+'<div class="pull-right" style="margin-top:20px">'
 								+'<button class="btn btn-default" data-mdf-delete="'+activities[k]['mdf_activity_id']+'" style="color:#444;margin-right:20px">Delete</button>'
 								+'<a href="/?p=mdf_order&package_id='+activities[k]['package']['package_id']+'" class="btn btn-success" style="color:#444;margin-right:20px">Proof of Execution</a>'
 								+'<a href="/?p=mdf_order&mdf_activity_id='+activities[k]['mdf_activity_id']+'" class="btn btn-primary">Edit</a>'
