@@ -79,7 +79,7 @@ class Core_Users {
 
 		$this->exclude_emails = array(
 			'entermarketing',
-			'mrpfd'
+			'mrpfddd'
 		);
 
 	}

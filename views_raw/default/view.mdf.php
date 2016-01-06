@@ -1,8 +1,12 @@
 <?
 
+$data['mdf']['quarters'] = Core::r('mdf')->get_quarters();
+$data['mdf']['user_entity'] = Core::r('mdf')->get_user_entity([ 'user_id' => $data['get_user_id'] ]);
+$data['mdf']['user_entity_id'] = (Core::has_error($data['mdf']['user_entity'])) ? -1 : $data['mdf']['user_entity']['entity_id'];
 
 $data['mdf']['wallet'] = Core::r('mdf')->get_wallet(array(
-        'wallet_id' => 2
+        'user_id' => $data['user_id'],
+        'quarter_id' => $data['mdf']['quarters'][0]['quarter_id']
     )
 );
 
