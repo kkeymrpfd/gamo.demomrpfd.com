@@ -180,7 +180,7 @@ $data['mdf']['mdf_activity_id'] = Core::get_input('mdf_activity_id', 'get');
 		} ?>
 /start_view
 		<center>
-			<div style="margin:20px 0px 50px 0px">
+			<div style="margin:20px 0px 200px 0px">
 				<button class="btn btn-default" style="color:#666">Cancel</button>
 				<button type="submit" class="btn btn-primary" style="margin-left:30px">' . $save_text . '</button>
 			</div>
