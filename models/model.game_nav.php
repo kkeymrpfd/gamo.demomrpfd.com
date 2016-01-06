@@ -48,6 +48,10 @@ class Model_Game_Nav {
 				$menu_assets['mdf']['current'] = true;
 				$menu_assets['mdf']['img_suf'] = 'Selected.png';
 				break;
+			case 'mdf_poe':
+				$menu_assets['mdf']['current'] = true;
+				$menu_assets['mdf']['img_suf'] = 'Selected.png';
+				break;
 			default:
 				$menu_assets['whatsnew']['current'] = true;
 				$menu_assets['whatsnew']['img_suf'] = 'Selected.png';

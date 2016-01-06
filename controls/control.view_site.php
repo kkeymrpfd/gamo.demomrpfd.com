@@ -57,7 +57,8 @@ class Control_View_Site {
 			'dg_landing',
 			'mdf',
 			'mdf_order',
-			'mdf_activities'
+			'mdf_activities',
+			'mdf_poe'
 		);
 
 		$no_header = array(

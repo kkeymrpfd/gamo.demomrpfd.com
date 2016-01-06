@@ -157,7 +157,7 @@ var mdf = new function() {
 								+'</div>'
 								+'<div class="pull-right" style="margin-top:20px">'
 								+'<button class="btn btn-default" data-mdf-delete="'+activities[k]['mdf_activity_id']+'" style="color:#444;margin-right:20px">Delete</button>'
-								+'<a href="/?p=mdf_order&package_id='+activities[k]['package']['package_id']+'" class="btn btn-default" style="color:#444;margin-right:20px">Proof of Execution</a>'
+								+'<a href="/?p=mdf_poe&mdf_activity_id='+activities[k]['mdf_activity_id']+'" class="btn btn-default" style="color:#444;margin-right:20px">Proof of Execution</a>'
 								+'<a href="/?p=mdf_order&mdf_activity_id='+activities[k]['mdf_activity_id']+'" class="btn btn-default" style="color:#444">Edit</a>'
 								+'<a href="http://mrpfd.com/dm" target="_blank" class="btn btn-primary" style="margin-left:50px">View Campaign</a>'
 								+'</div>'
