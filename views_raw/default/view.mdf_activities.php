@@ -10,7 +10,14 @@ $data['mdf']['vendors'] = Core::r('mdf')->get_entities(array(
 	)
 );
 
+$data['mdf']['partners'] = Core::r('mdf')->get_entities(array(
+		'type' => 'partner'
+	)
+);
+
 $data['mdf']['packages'] = Core::r('mdf')->get_packages();
+
+$data['mdf']['quarters'] = Core::r('mdf')->get_quarters();
 
 $data['mdf']['categories'] = Core::r('categories')->get_categories(array(
 		'category_type' => 'mdf_package_type'
@@ -37,8 +44,62 @@ Core::get_element('game_header');
 
 	<div>
 		<div class="module-title" style="display:inline-block">MDF Activities</div>
-		<div style="display:inline-block;margin-right:1em" class="pull-right"><a href="/?p=mdf" class="btn btn-primary">Return to order screen</a></div>
+		<div style="display:inline-block" class="pull-right">
+			<a href="/?p=mdf" class="btn btn-primary">Return to order screen</a>
+			<a href="#" class="btn btn-primary" style="margin-left:20px">Export</a>
+		</div>
 	</div>
+/end_view
+<? if(Core::get_input('admin', 'get') == 1) { ?>
+/start_view
+<div style="margin:20px 0px">
+	<div class="form-group">
+		<label for="redirect_url" style="width:100px;text-align:right">Quarter</label>
+		<select class="form-control" style="width:400px;display:inline-block;margin-left:20px">
+			<option value="">All Quarters</option>
+/end_view
+<? foreach($data['mdf']['quarters'] as $k => $quarter) { ?>
+/start_view
+			<option value="">' . $quarter['name'] . '</option>
+/end_view
+<? } ?>
+/start_view
+		</select>
+	</div>
+	<div class="form-group">
+		<label for="redirect_url" style="width:100px;text-align:right">Vendor</label>
+		<select class="form-control" style="width:400px;display:inline-block;margin-left:20px">
+			<option value="">All Vendors</option>
+/end_view
+<? foreach($data['mdf']['vendors'] as $k => $vendor) { ?>
+/start_view
+			<option value="">' . $vendor['name'] . '</option>
+/end_view
+<? } ?>
+/start_view
+		</select>
+	</div>
+	<div class="form-group">
+		<label for="redirect_url" style="width:100px;text-align:right">Partner</label>
+		<select class="form-control" style="width:400px;display:inline-block;margin-left:20px">
+			<option value="">All Partners</option>
+/end_view
+<? foreach($data['mdf']['partners'] as $k => $partner) { ?>
+/start_view
+			<option value="">' . $partner['name'] . '</option>
+/end_view
+<? } ?>
+/start_view
+		</select>
+	</div>
+	<div class="form-group">
+		<label for="redirect_url" style="width:100px;text-align:right">Search</label>
+		<input type="text" class="form-control" style="display:inline-block;width:400px;margin-left:20px;color:#000" placeholder="Search for a specific activity">
+	</div>
+</div>
+/end_view
+<? } ?>
+/start_view
 	<div id="mdf_result_h" style="margin:20px 0px;display:none"></div>
 	<div id="mdf-activities-list" style="margin-top:30px"></div>
 </div>
