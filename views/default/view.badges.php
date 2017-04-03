@@ -1,20 +1,10 @@
 <?
-Core::get_element('game_header');
+Core::get_element ( 'game_header' );
 ?>
 <? $view_output .= '
 <div class="visible-xs mtop15"></div>
 		<div class="content widget">
-			<div class="row">
-				<div class="col-md-12 col-sm-12 col-xs-12">
-					<img src="img/grandprize.png">
-					<div style="font-weight:bold;text-align:center;margin:10px">
-					Grand prize winner is selected from a raffle at the end of the quarter. To enter:
-					<br>
-					&bull; For every approved registered deal you submit, get 1 entry into the grand prize
-					<br>&bull; For every closed deal you submit, get 5 entries into the grand prize
-					</div>
-				</div>
-			</div>
+			
 			<div class="row">
 				<div class="col-md-6 col-sm-6 col-xs-6">
 					<h1>Badges</h1>
@@ -28,7 +18,10 @@ Core::get_element('game_header');
 			</div>
 			<div class="row">
 '; ?>
-<? foreach($data['badges'] as $k => $badge) { ?>
+<?
+
+foreach ( $data ['badges'] as $k => $badge ) {
+	?>
 <? $view_output .= '
 <div class="col-md-6 col-sm-12 col-xs-12">
 	<br>
@@ -44,12 +37,14 @@ Core::get_element('game_header');
 	</div>									
 </div>
 '; ?>
-<? } ?>
+<?
+}
+?>
 <? $view_output .= '
 			</div>
 			<div class="row">
 				<div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:20px">
-					<p>*Prizes will be distributed after the end of the game at the end of the quarter. All activity is subject to review and approval. If you have any questions please email contact@delloverdrive.com</p>
+					<p>*Prizes will be distributed after the end of the game at the end of the quarter. All activity is subject to review and approval. If you have any questions please email contact@mrpfd.com</p>
 				</div>
 
 			</div>
@@ -58,5 +53,5 @@ Core::get_element('game_header');
 		</div>
 '; ?>
 <?
-Core::get_element('game_footer');
+Core::get_element ( 'game_footer' );
 ?>

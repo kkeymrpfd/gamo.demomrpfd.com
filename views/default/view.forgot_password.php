@@ -5,7 +5,7 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Dell Overdrive</title>
+	<title>MRP Gamification</title>
 	<!-- Bootstrap -->
 		<link href="css/bootstrap.min.css" rel="stylesheet">
 		<!--
@@ -45,7 +45,7 @@
 						<div class="panel panel-default" style="color:#000">
 							<div class="panel-heading" style="text-align:center">
 							    <h3 class="panel-title" style="font-weight:bold">
-							    	<div style="font-weight:bold;font-size:1.1em">Dell Overdrive</div>
+							    	<div style="font-weight:bold;font-size:1.1em">MRP Gamification</div>
 								</h3>
 							</div>
 					  		<div class="panel-body">

@@ -1,48 +1,86 @@
 <?
-Core::get_element('game_header');
+Core::get_element ( 'game_header' );
 ?>
 /start_view
 /js: /js/gamo/resources.js
 <div class="row">
 			<div class="col-md-4 col-sm-4 col-xs-12 submenu hidden-xs">
 /end_view
-			<? Core::get_element('game_nav'); ?>
+			<?
+			
+Core::get_element ( 'game_nav' );
+			?>
 /start_view
 			</div>
 			<div class="col-md-8 col-sm-8 col-xs-12 content2">
 				<div class="module-title hidden-xs">What\'s New</div>
 /end_view		
-			<? 
+			<?
 			
-				$count = 0;			
-				foreach( $data['whats_new'] as $news_item ): 
-			
-			
-				if( $news_item['item_type'] == 'resource' and $news_item['resource_id'] == 79 ): ?>
+			$count = 0;
+			foreach ( $data ['whats_new'] as $news_item ) :
+				
+				if ($news_item ['item_type'] == 'resource') :
+					?>
 								
-							<? if( $news_item['type'] == 'video' ): ?>
+							<?
+					
+if ($news_item ['type'] == 'video') :
+						?>
 							
-								<? $action_button_name = 'Watch'; ?>
-								<? $action_button_url = '#'; ?>
-								<? $action_button_action = 'gamo_resources.show_video({ resource_id: ' . $news_item['resource_id'] . ' });return false;'; ?>
+								<?
+						
+$action_button_name = 'Watch';
+						?>
+								<?
+						
+$action_button_url = '#';
+						?>
+								<?
+						
+$action_button_action = 'gamo_resources.show_video({ resource_id: ' . $news_item ['resource_id'] . ' });return false;';
+						?>
 								
-							<?   else: ?>
 							
-							   	<? $action_button_name = 'Download'; ?>
-								<? $action_button_url = '/?a=download_resource&resource_id=' . $news_item['resource_id']; ?>
-								<? $action_button_action = ''; ?>
+					 <?
+else :
+						?>
+							
+							   	<?
+						
+$action_button_name = 'Download';
+						?>
+								<?
+						
+$action_button_url = '/?a=download_resource&resource_id=' . $news_item ['resource_id'];
+						?>
+								<?
+						
+$action_button_action = '';
+						?>
 								
-							<?    endif; ?>
+							
+					<?
+endif;
+					?>
 									
 							/start_view
 							<div class="content widget">
 								/end_view
-								<?if($count==0): ?>
+								<?
+					
+if ($count == 0) :
+						?>
 									/start_view
 									<h1 class="visible-xs"><img src="img/Header_WhatsNew.png">What&#39;s New</h1>
 									/end_view
-									<? $count++;?>
-								<?endif;?>
+									<?
+						
+$count ++;
+						?>
+								
+					<?endif;
+					?>
 								/start_view
 								<div class="media">
 									<div class="pull-left">
@@ -62,16 +100,12 @@ Core::get_element('game_header');
 							
 							/end_view
 				
-				<? endif; 
 				
+				<? endif;
 				
-			
-			
-			
-			
-				if( $news_item['item_type'] == 'whats_new' ):
-			
-			?>
+				if ($news_item ['item_type'] == 'whats_new') :
+					
+					?>
 			
 				/start_view
 				<div class="content widget">
@@ -89,9 +123,15 @@ Core::get_element('game_header');
 				</div>
 				/end_view
 				
-				<? endif; ?>
+				
+				<? endif;
+				?>
 
-			<? endforeach; ?>
+			<?
+			
+endforeach
+			;
+			?>
 
 
 /start_view				
@@ -99,5 +139,5 @@ Core::get_element('game_header');
 </div>
 /end_view
 <?
-Core::get_element('game_footer');
+Core::get_element ( 'game_footer' );
 ?>

@@ -1,48 +1,86 @@
 <?
-Core::get_element('game_header');
+Core::get_element ( 'game_header' );
 ?>
 <? $view_output .= '
 <script type="text/javascript" src="/js/gamo/resources.js"></script>
 <div class="row">
 			<div class="col-md-4 col-sm-4 col-xs-12 submenu hidden-xs">
 '; ?>
-			<? Core::get_element('game_nav'); ?>
+			<?
+			
+Core::get_element ( 'game_nav' );
+			?>
 <? $view_output .= '
 			</div>
 			<div class="col-md-8 col-sm-8 col-xs-12 content2">
 				<div class="module-title hidden-xs">What\'s New</div>
 '; ?>		
-			<? 
+			<?
 			
-				$count = 0;			
-				foreach( $data['whats_new'] as $news_item ): 
-			
-			
-				if( $news_item['item_type'] == 'resource' and $news_item['resource_id'] == 79 ): ?>
+			$count = 0;
+			foreach ( $data ['whats_new'] as $news_item ) :
+				
+				if ($news_item ['item_type'] == 'resource') :
+					?>
 								
-							<? if( $news_item['type'] == 'video' ): ?>
+							<?
+					
+if ($news_item ['type'] == 'video') :
+						?>
 							
-								<? $action_button_name = 'Watch'; ?>
-								<? $action_button_url = '#'; ?>
-								<? $action_button_action = 'gamo_resources.show_video({ resource_id: ' . $news_item['resource_id'] . ' });return false;'; ?>
+								<?
+						
+$action_button_name = 'Watch';
+						?>
+								<?
+						
+$action_button_url = '#';
+						?>
+								<?
+						
+$action_button_action = 'gamo_resources.show_video({ resource_id: ' . $news_item ['resource_id'] . ' });return false;';
+						?>
 								
-							<?   else: ?>
 							
-							   	<? $action_button_name = 'Download'; ?>
-								<? $action_button_url = '/?a=download_resource&resource_id=' . $news_item['resource_id']; ?>
-								<? $action_button_action = ''; ?>
+					 <?
+else :
+						?>
+							
+							   	<?
+						
+$action_button_name = 'Download';
+						?>
+								<?
+						
+$action_button_url = '/?a=download_resource&resource_id=' . $news_item ['resource_id'];
+						?>
+								<?
+						
+$action_button_action = '';
+						?>
 								
-							<?    endif; ?>
+							
+					<?
+endif;
+					?>
 									
 							<? $view_output .= '
 							<div class="content widget">
 								'; ?>
-								<?if($count==0): ?>
+								<?
+					
+if ($count == 0) :
+						?>
 									<? $view_output .= '
 									<h1 class="visible-xs"><img src="img/Header_WhatsNew.png">What&#39;s New</h1>
 									'; ?>
-									<? $count++;?>
-								<?endif;?>
+									<?
+						
+$count ++;
+						?>
+								
+					<?endif;
+					?>
 								<? $view_output .= '
 								<div class="media">
 									<div class="pull-left">
@@ -62,16 +100,12 @@ Core::get_element('game_header');
 							
 							'; ?>
 				
-				<? endif; 
 				
+				<? endif;
 				
-			
-			
-			
-			
-				if( $news_item['item_type'] == 'whats_new' ):
-			
-			?>
+				if ($news_item ['item_type'] == 'whats_new') :
+					
+					?>
 			
 				<? $view_output .= '
 				<div class="content widget">
@@ -89,9 +123,15 @@ Core::get_element('game_header');
 				</div>
 				'; ?>
 				
-				<? endif; ?>
+				
+				<? endif;
+				?>
 
-			<? endforeach; ?>
+			<?
+			
+endforeach
+			;
+			?>
 
 
 <? $view_output .= '				
@@ -99,5 +139,5 @@ Core::get_element('game_header');
 </div>
 '; ?>
 <?
-Core::get_element('game_footer');
+Core::get_element ( 'game_footer' );
 ?>

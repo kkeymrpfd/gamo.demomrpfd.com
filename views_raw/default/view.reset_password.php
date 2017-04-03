@@ -5,7 +5,7 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Dell Overdrive</title>
+	<title>MRP Gamification</title>
 	<!-- Bootstrap -->
 		<link href="css/bootstrap.min.css" rel="stylesheet">
 		<!--
@@ -47,7 +47,7 @@
 					    <div class="panel panel-default" style="color:#000">
 						      <div class="panel-heading" style="text-align:center">
 						        <h3 class="panel-title" style="font-weight:bold">
-						          <div style="font-weight:bold;font-size:1.1em">Dell Overdrive</div>
+						          <div style="font-weight:bold;font-size:1.1em">MRP Gamification</div>
 						        </h3>
 						      </div>
 						        <div class="panel-body">
@@ -55,7 +55,9 @@
 						                <div class="alert alert-info">Please enter your e-mail address and select your new password below</div>
 						            </div>
 						/end_view
-						<? if($data['key_valid'] == 1) { ?>
+						<?
+						if ($data ['key_valid'] == 1) {
+							?>
 						/start_view
 						<form id="password-form" class="form-horizontal" role="form">
 						              <div id="result-msg"></div>
@@ -90,12 +92,16 @@
 						              <input type="hidden" value="' . Core::safe_echo($data['reset_key']) . '" id="reset_key">
 						            </form>
 						/end_view
-						<? } else { ?>
+						<?
+						} else {
+							?>
 						/start_view
 						This password reset link is no longer valid.
 						<br><br>To request a new password, please <a href="/?p=forgot_password">click here</a>
 						/end_view
-						<? } ?>     
+						<?
+						}
+						?>     
         /start_view
 			        </div>
 			    </div>

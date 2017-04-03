@@ -4116,7 +4116,7 @@ textarea.input-group-sm>.form-control,textarea.input-group-sm>.input-group-addon
 .navbar-nav>li>a {
     padding-top: 10px;
     padding-bottom: 10px;
-    line-height: 20px;
+    line-height: 25px;
 }
 
 @media (max-width:767px) {

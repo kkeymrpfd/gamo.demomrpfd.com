@@ -1,6 +1,6 @@
 <?
-Core::get_element('game_header');
-$demandgen_points = Core::r('actions')->get_action_points('send_demandgen');
+Core::get_element ( 'game_header' );
+$demandgen_points = Core::r ( 'actions' )->get_action_points ( 'send_demandgen' );
 ?>
 /start_view
 /css: /css/bootstrap-tagsinput.css
@@ -8,19 +8,22 @@ $demandgen_points = Core::r('actions')->get_action_points('send_demandgen');
 <div class="row">
 			<div class="col-md-4 col-sm-4 col-xs-12 submenu hidden-xs">
 /end_view
-			<? Core::get_element('game_nav'); ?>
+			<?
+			
+			Core::get_element ( 'game_nav' );
+			?>
 /start_view
 			</div>
 			<div class="col-md-8 col-sm-8 col-xs-12 content2 non-meetings">
 				<div id="sent-msg" style="margin:20px 0px;display:none"><div class="alert alert-success">Your demand gen email has been succesfully processed! The contacts you provided will be receiving their emails shortly!</div></div>
 				<div class="hidden-xs">
 					<div class="module-title">Demand Gen</div>
-					<h4 style="line-height: 24px;">Send demand gen emails to prospects through Dell Overdrive.</h4>
+					<h4 style="line-height: 24px;">Send demand gen emails to prospects through MRP Gamification.</h4>
 				</div>
 				<div class="visible-xs">
 					<div class="content widget">
 						<h1>Sales Resources</h1>
-						<h5>Below you will find valuable information regarding Dell products and solutions to help better prepare you for the sales process. Look for new assets periodically to earn even more points and rewards.</h5>
+						<h5>Below you will find valuable information regarding MRP products and solutions to help better prepare you for the sales process. Look for new assets periodically to earn even more points and rewards.</h5>
 					</div>
 				</div>
 				<div class="bluebackground widget">
@@ -46,7 +49,10 @@ $demandgen_points = Core::r('actions')->get_action_points('send_demandgen');
 				
 /end_view	
 
-				<? foreach( $data['email_templates']['records'] as $entry ) { ?>								
+				<?
+				
+				foreach ( $data ['email_templates'] ['records'] as $entry ) {
+					?>								
 				/start_view
 				<div class="content widget"> 
 					<div class="media">
@@ -66,7 +72,9 @@ $demandgen_points = Core::r('actions')->get_action_points('send_demandgen');
 					</div>
 				</div>
 				/end_view
-				<? } ?>
+				<?
+				}
+				?>
 				
 /start_view				
 	</div>
@@ -95,5 +103,5 @@ $(document).ready(function() {
 </script>
 /end_view
 <?
-Core::get_element('game_footer');
+Core::get_element ( 'game_footer' );
 ?>

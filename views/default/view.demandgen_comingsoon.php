@@ -1,5 +1,5 @@
 <?
-Core::get_element('game_header');
+Core::get_element ( 'game_header' );
 ?>
 <? $view_output .= '
 <script type="text/javascript" src="/js/core.js"></script>
@@ -7,18 +7,21 @@ Core::get_element('game_header');
 <div class="row">
 			<div class="col-md-4 col-sm-4 col-xs-12 submenu hidden-xs">
 '; ?>
-			<? Core::get_element('game_nav'); ?>
+			<?
+			
+			Core::get_element ( 'game_nav' );
+			?>
 <? $view_output .= '
 			</div>
 			<div class="col-md-8 col-sm-8 col-xs-12 content2 non-meetings">
 				<div class="hidden-xs">
 					<div class="module-title">Demand Gen</div> 
-					<h4 style="line-height: 24px;">Coming Soon: Share assets with prospects through Dell Overdrive to earn points and rewards.</h4>
+					<h4 style="line-height: 24px;">Coming Soon: Share assets with prospects through MRP Gamification to earn points and rewards.</h4>
 				</div>
 				<div class="visible-xs">
 					<div class="widget content">
 						<h1>Demand Gen</h1>
-						<h4>Coming Soon: Share assets with prospects through Dell Overdrive to earn points and rewards.</h4>
+						<h4>Coming Soon: Share assets with prospects through MRP Gamification to earn points and rewards.</h4>
 					</div>
 				</div>
 				<div class="bluebackground widget" style="display:none">
@@ -34,7 +37,10 @@ Core::get_element('game_header');
                 <div class="media">*You can earn up to a max of 500 points/month.</div>
 				</div>
 '; ?>		
-				<? foreach( $data['resources'] as $news_item ): ?>
+				<?
+				
+				foreach ( $data ['resources'] as $news_item ) :
+					?>
 						
 				<? $view_output .= '
 				<div class="content widget">
@@ -52,7 +58,10 @@ Core::get_element('game_header');
 				</div>
 				'; ?>		
 						
-				<? endforeach; ?>
+				<?
+				endforeach
+				;
+				?>
 <? $view_output .= '				
 			</div>
 		</div>
@@ -92,13 +101,13 @@ Core::get_element('game_header');
 								<textarea class="form-control" id="message" style="height:250px;text-align:left;display:none">
 Hi,
 
-[name] has shared a resource with you through Dell Security Overdrive. To download it, please click here:
+[name] has shared a resource with you through MRP Gamification. To download it, please click here:
 
 [link]
 
 Regards,
 
-Delll Security Overdrive
+MRP Gamification
 								</textarea>
 							</div>
 							<p class="pull-right">
@@ -123,5 +132,5 @@ $(document).ready(function() {
 </script>
 '; ?>
 <?
-Core::get_element('game_footer');
+Core::get_element ( 'game_footer' );
 ?>

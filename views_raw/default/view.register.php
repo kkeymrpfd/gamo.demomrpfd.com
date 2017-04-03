@@ -6,7 +6,7 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Dell Overdrive</title>
+	<title>MRP Gamification</title>
 	<!-- Bootstrap -->
 		<link href="css/bootstrap.min.css" rel="stylesheet">
 		<!--
@@ -138,8 +138,8 @@
 											
 					</div>
 				</div>
-				<img src="img/reg-banner.png" class="img-responsive" style="margin-bottom:20px">
-				<div style="margin:3em;text-align:center">Questions or comments? E-mail <a class="forgotpass" href="mailto:contact@delloverdrive.com">contact@delloverdrive.com</a></div>
+				
+				<div style="margin:3em;text-align:center">Questions or comments? E-mail <a class="forgotpass" href="mailto:contact@mrpfd.com">contact@mrpfd.com</a></div>
 			</div>
 		</div>
 		

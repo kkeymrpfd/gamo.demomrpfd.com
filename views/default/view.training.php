@@ -1,23 +1,26 @@
 <?
-Core::get_element('game_header');
+Core::get_element ( 'game_header' );
 ?>
 <? $view_output .= '
 <script type="text/javascript" src="/js/gamo/resources.js"></script>
 <div class="row">
 			<div class="col-md-4 col-sm-4 col-xs-12 submenu hidden-xs">
 '; ?>
-			<? Core::get_element('game_nav'); ?>
+			<?
+			
+Core::get_element ( 'game_nav' );
+			?>
 <? $view_output .= '
 			</div>
 			<div class="col-md-8 col-sm-8 col-xs-12 content2 non-meetings">
 				<div class="hidden-xs">
 					<div class="module-title">Sales Resources</div>
-					<h4 style="line-height: 24px;">Below you will find valuable information regarding Dell Security products and solutions to help better prepare you for the sales process. Look for new assets periodically to earn even more points and rewards.</h4>
+					<h4 style="line-height: 24px;">Below you will find valuable information regarding MRP marketing products and solutions to help better prepare you for the sales process. Look for new assets periodically to earn even more points and rewards.</h4>
 				</div>
 				<div class="visible-xs">
 					<div class="content widget">
 						<h1>Sales Resources</h1>
-						<h5>Below you will find valuable information regarding Dell Security products and solutions to help better prepare you for the sales process. Look for new assets periodically to earn even more points and rewards..</h5>
+						<h5>Below you will find valuable information regarding MRP Marketing products and solutions to help better prepare you for the sales process. Look for new assets periodically to earn even more points and rewards..</h5>
 					</div>
 				</div>
 				<div class="bluebackground widget">
@@ -45,11 +48,17 @@ Core::get_element('game_header');
 				<div style="margin-bottom:40px">	
 					View Resources: <select id="resource_category" style="background-color:#fff;font-size:1.4em">
 '; ?>
-<?php foreach($data['resource_categories'] as $k => $v) { ?>
+<?php
+
+foreach ( $data ['resource_categories'] as $k => $v ) {
+	?>
 <? $view_output .= '
 <option value="' . $k . '"' . $v['selected'] . '>' . $v['label'] . '</option>
 '; ?>
-<? } ?>
+<?
+
+}
+?>
 <? $view_output .= '
 					</select>
 				</div>
@@ -57,21 +66,51 @@ Core::get_element('game_header');
 				
 '; ?>	
 
-				<? foreach( $data['resources'] as $news_item ): ?>		
+				<?
 				
-				<? if( $news_item['type'] == 'video' ): ?>
+foreach ( $data ['resources'] as $news_item ) :
+					?>		
 				
-					<? $action_button_name = 'Watch'; ?>
-					<? $action_button_url = '#'; ?>
-					<? $action_button_action = 'gamo_resources.show_video({ resource_id: ' . $news_item['resource_id'] . ' });return false;'; ?>
+				<?
 					
-				<?   else: ?>
+if ($news_item ['type'] == 'video') :
+						?>
 				
-				   	<? $action_button_name = 'Download'; ?>
-					<? $action_button_url = '/?a=download_resource&resource_id=' . $news_item['resource_id']; ?>
-					<? $action_button_action = ''; ?>
+					<?
+						
+$action_button_name = 'Watch';
+						?>
+					<?
+						
+$action_button_url = '#';
+						?>
+					<?
+						
+$action_button_action = 'gamo_resources.show_video({ resource_id: ' . $news_item ['resource_id'] . ' });return false;';
+						?>
 					
-				<?    endif; ?>
+				
+					 <?
+else :
+						?>
+				
+				   	<?
+						
+$action_button_name = 'Download';
+						?>
+					<?
+						
+$action_button_url = '/?a=download_resource&resource_id=' . $news_item ['resource_id'];
+						?>
+					<?
+						
+$action_button_action = '';
+						?>
+					
+				
+					<?
+endif;
+					?>
 						
 				<? $view_output .= '
 				<div class="content widget"> 
@@ -91,12 +130,16 @@ Core::get_element('game_header');
 					</div>
 				</div>
 				'; ?>
-				<? endforeach; ?>
+				<?
+				
+endforeach
+				;
+				?>
 				
 <? $view_output .= '				
 	</div>
 </div>
 '; ?>
 <?
-Core::get_element('game_footer');
+Core::get_element ( 'game_footer' );
 ?>

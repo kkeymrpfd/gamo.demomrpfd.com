@@ -1,17 +1,17 @@
 <?
-Core::get_element('game_header');
+Core::get_element ( 'game_header' );
 ?>
 <? $view_output .= '
 <div class="visible-xs mtop15"></div>
     <div class="content widget about">
 		<h1>About</h1>
-		<p>Dell Overdrive is your one-stop-shop to learn, drive sales, and earn!
+		<p>MRP Gamification is your one-stop-shop to learn, drive sales, and earn!
 		For each activity you do on this site you will be rewarded with points or even directly with Amazon gift cards. Based on the activities you do and how many points you have, you will be eligible for different prizes. To see a full list of the prizes, please <a href="/?p=badges">click here</a>. A list of activities are listed below. More activities will be added throughout the game.
 		<p>&nbsp;</p>
 		<strong>General</strong>
-		<p><span class="def">+20 Points</span> for registering for Dell Overdrive</p>
-		<p><span class="def">+50 Points</span> for logging in to Dell Overdrive for at least 3 days a week for 4 weeks</p>
-		<p><span class="def">+30 Points</span> for referring a colleague that joins Dell Overdrive (Coming Soon)</p>
+		<p><span class="def">+20 Points</span> for registering for MRP Gamification</p>
+		<p><span class="def">+50 Points</span> for logging in to MRP Gamification for at least 3 days a week for 4 weeks</p>
+		<p><span class="def">+30 Points</span> for referring a colleague that joins MRP Gamification (Coming Soon)</p>
 		
 		<p>&nbsp;</p>
 		<strong>Sales Resources</strong>
@@ -20,7 +20,7 @@ Core::get_element('game_header');
 
 		<p>&nbsp;</p>
 		<strong>Demand Gen (Coming Soon)</strong>
-		<p><span class="def">+2 Points </span> for each valid contact you send a promotional email to through the Dell Overdrive platform.</p>
+		<p><span class="def">+2 Points </span> for each valid contact you send a promotional email to through the MRP Gamification platform.</p>
 
 		<p>&nbsp;</p>
 		<strong>Opportunities</strong>
@@ -45,10 +45,10 @@ Core::get_element('game_header');
 			</div>
 		</div>
 		<br><br>
-		<p>If you have any questions please reach out to <a href="mailto:contact@delloverdrive.com">contact@delloverdrive.com</a></p>
+		<p>If you have any questions please reach out to <a href="mailto:contact@mrpfd.com">contact@mrpfd.com</a></p>
 	</div>
 	<!-- InstanceEndEditable -->
 '; ?>
 <?
-Core::get_element('game_footer');
+Core::get_element ( 'game_footer' );
 ?>
