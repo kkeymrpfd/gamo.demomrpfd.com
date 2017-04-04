@@ -358,7 +358,15 @@ $(document).ready(function() {
 
 	}
 
-	$("#mdf-order-form").on('submit', function(e) {
+	$("#mdf-order-form button[value=Cancel]").on('click', function(e) {
+
+		e.preventDefault();
+
+		location = "/?p=mdf";
+
+	});
+	
+	$("#mdf-order-form button[type=submit]").on('click', function(e) {
 
 		e.preventDefault();
 
