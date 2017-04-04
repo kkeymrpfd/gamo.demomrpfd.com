@@ -152,7 +152,7 @@ var mdf = new function() {
 									+'</div>'
 									+'<div class="col-lg-9">'
 										+'<b>Deliverables</b><br>'
-										+activities[k]['package_option']['description']
+										+activities[k]['package_option'] != null ? activities[k]['package_option']['description'] : ""
 									+'</div>'
 								+'</div>'
 								+'<div class="pull-right" style="margin-top:20px">'
