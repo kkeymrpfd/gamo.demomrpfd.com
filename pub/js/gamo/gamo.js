@@ -444,7 +444,7 @@ $(document).ready(function() {
 		Core.log('here');
 	});
 
-	document.title = 'Dell Overdrive';
+	document.title = 'MRP Gamification';
 
 	$('body').on('click', '.check-toggle', function(e) {
 
